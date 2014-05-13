@@ -1,35 +1,7 @@
 from sqlalchemy import create_engine, Column, Integer, String, ForeignKey 
 from sqlalchemy.orm import relationship, backref
 from database import Base
-from random import choice
-from string import ascii_uppercase, ascii_lowercase, digits
-from hashlib import sha512
-
-class Security:
-
-
-    @staticmethod
-    def make_salt():
-
-        salt = ''
-
-        for i in range(0, 10):
-            salt += choice(ascii_uppercase + ascii_lowercase + digits)
-
-        return salt
-
-
-    @staticmethod
-    def salt_and_hash(password, salt):
-        return sha512(password + salt).hexdigest()
-
-    @staticmethod
-    def authenticate(user, password):
-
-        if user.password == Security.salt_and_hash(password, user.salt):
-            return True
-        else:
-            return False
+from security import Authentication
 
 
 class User(Base):
@@ -45,8 +17,8 @@ class User(Base):
 
     def __init__(self, email, password):
         self.email = email
-        self.salt = Security.make_salt()
-        self.password = Security.salt_and_hash(password, self.salt)
+        self.salt = Authentication.make_salt()
+        self.password = Authentication.salt_and_hash(password, self.salt)
 
 
     def __repr__(self):
