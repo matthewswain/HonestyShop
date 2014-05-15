@@ -1,7 +1,8 @@
-from sqlalchemy import create_engine, Column, Integer, String, ForeignKey 
+from sqlalchemy import create_engine, Column, Integer, String, ForeignKey, DateTime
 from sqlalchemy.orm import relationship, backref
 from database import Base
 from security import Authentication
+from datetime import datetime
 
 class User(Base):
     __tablename__ = 'users'
@@ -11,8 +12,9 @@ class User(Base):
     salt = Column(String, nullable=False)
     password = Column(String, nullable=False)
     name = Column(String)
-    Purchases = relationship('Purchase', backref='user')
-    
+    purchases = relationship('Purchase', backref='user')
+    payments = relationship('Payment', backref='user')
+
 
     def __init__(self, email, password):
         self.email = email
@@ -56,14 +58,14 @@ class Purchase(Base):
     user_id = Column(Integer, ForeignKey('users.id'), nullable=False)
     item_id = Column(Integer, ForeignKey('items.id'), nullable=False)
     price = Column(Integer, nullable=False)
-#    timestamp = # Import date-time format from SQL Alchemy, make nullable=False
+    timestamp = Column(DateTime, nullable=False)
 
 
     def __init__(self, user, item):
         self.user_id = user.id
         self.item_id = item.id
         self.price = item.price
-#        self.timestamp = # Add current data-time
+        self.timestamp = datetime.now()
 
 
     def __repr__(self):
@@ -76,4 +78,15 @@ class Payment(Base):
     id = Column(Integer, primary_key=True)
     user_id = Column(Integer, ForeignKey('users.id'), nullable=False)
     value = Column(Integer, nullable=False)
-#    timestamp = # Import date-time format from SQL Alchemy, make nullable=False
+    timestamp = Column(DateTime, nullable=False)
+
+
+    def __init__(self, user, value):
+        self.user_id = user.id
+        self.value = value
+        self.timestamp = datetime.now()
+
+
+    def __repr__(self):        
+        return '<Payment {0}>'.format(self.id)
+
