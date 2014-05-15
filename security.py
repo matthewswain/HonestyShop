@@ -28,6 +28,7 @@ class Authentication:
         else:
             return False
 
+
 class Email:
 
     @staticmethod

@@ -3,7 +3,6 @@ from sqlalchemy.orm import relationship, backref
 from database import Base
 from security import Authentication
 
-
 class User(Base):
     __tablename__ = 'users'
 
@@ -12,7 +11,7 @@ class User(Base):
     salt = Column(String, nullable=False)
     password = Column(String, nullable=False)
     name = Column(String)
-    transactions = relationship('Transaction', backref='user')
+    Purchases = relationship('Purchase', backref='user')
     
 
     def __init__(self, email, password):
@@ -25,14 +24,22 @@ class User(Base):
         return '<User {0} - {1}>'.format(self.id, self.email)
 
 
+class UserGroup(Base):
+    __tablename__ = 'user_groups'
+
+    id = Column(Integer, primary_key=True)
+    name = Column(String, unique=True, nullable=False)
+    
+
 class Item(Base):
     __tablename__ = 'items'
 
     id = Column(Integer, primary_key=True)
     name = Column(String, unique=True)
     price = Column(Integer)
+    Purchases = relationship('Purchase', backref='item')
 
-
+    
     def __init__(self, name, price):
         self.name = name
         self.price = price
@@ -42,19 +49,31 @@ class Item(Base):
         return '<Item {0} - {1}>'.format(self.id, self.name)
 
 
-class Transaction(Base):
-    __tablename__ = 'transactions'
+class Purchase(Base):
+    __tablename__ = 'Purchases'
 
     id = Column(Integer, primary_key=True)
     user_id = Column(Integer, ForeignKey('users.id'), nullable=False)
-    value = Column(Integer)
+    item_id = Column(Integer, ForeignKey('items.id'), nullable=False)
+    price = Column(Integer, nullable=False)
+#    timestamp = # Import date-time format from SQL Alchemy, make nullable=False
 
 
     def __init__(self, user, item):
         self.user_id = user.id
         self.item_id = item.id
-        self.value = item.price
+        self.price = item.price
+#        self.timestamp = # Add current data-time
 
 
     def __repr__(self):
-        return '<Transaction {0}>'.format(self.id)
+        return '<Purchase {0}>'.format(self.id)
+        
+    
+class Payment(Base):
+    __tablename__ = 'payments'
+    
+    id = Column(Integer, primary_key=True)
+    user_id = Column(Integer, ForeignKey('users.id'), nullable=False)
+    value = Column(Integer, nullable=False)
+#    timestamp = # Import date-time format from SQL Alchemy, make nullable=False
