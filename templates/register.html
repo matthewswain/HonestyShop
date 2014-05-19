@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% block body %}
+<h1>Register</h1>
+<p>Please enter your details below to register.</p>
+<form target="" method="POST">
+	Email: <input name="username" id="username" type="text">	
+	Password: <input name="password" id="password" type="password">
+	<input value="Register" type="submit">
+</form>
+<p>Already registered? Click <a href="{{ urls['login'] }}">here</a> to go back to the login page.</p>
+{% endblock body %}
