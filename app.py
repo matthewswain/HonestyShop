@@ -1,5 +1,7 @@
 from flask import Flask, render_template, url_for, request, redirect, session
 from functools import wraps
+from models import User
+from security import Authentication
 app = Flask(__name__)
 
 
@@ -32,8 +34,12 @@ def get_urls():
 @app.route('/login/', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
-        session['email'] = request.form['email']
-        return redirect(url_for('home'))
+        user = User.query.filter(User.email==request.form['email']).first()
+        if user != None and  Authentication.authenticate(user, request.form['password']):
+             session['email'] = request.form['email']
+             return redirect(url_for('home'))
+        else:
+            return redirect(url_for('login'))
     else:
         return render_template('login.html', urls=get_urls())
 

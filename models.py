@@ -16,10 +16,14 @@ class User(Base):
     payments = relationship('Payment', backref='user')
 
 
-    def __init__(self, email, password):
-        self.email = email
+    def set_password(self, password):
         self.salt = Authentication.make_salt()
         self.password = Authentication.salt_and_hash(password, self.salt)
+
+
+    def __init__(self, email, password):
+        self.email = email
+        self.set_password(password)
 
 
     def __repr__(self):
