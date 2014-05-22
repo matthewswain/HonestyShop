@@ -3,9 +3,22 @@
 <h1>Register</h1>
 <p>Please enter your details below to register.</p>
 <form target="" method="POST">
-	Email: <input name="username" id="username" type="text">	
-	Password: <input name="password" id="password" type="password">
-	<input value="Register" type="submit">
+	<table>
+		<tr>
+			<td>Email:</td>
+			<td><input name="username" id="username" type="text"></td>
+		</tr>
+		<tr>
+			<td>Name:</td>
+			<td><input name="name" id="name" type="text"></td>
+		</tr>
+		<tr>
+			<td colspan="2"><em>You'll be emailed a link to set your password and activate your account.</em></td>
+		</tr>
+		<tr>
+			<td colspan="2"><input value="Register" type="submit"></td>
+		</tr>
+	</table>
 </form>
 <p>Already registered? Click <a href="{{ urls['login'] }}">here</a> to go back to the login page.</p>
 {% endblock body %}
