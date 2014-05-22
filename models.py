@@ -17,7 +17,7 @@ class User(Base):
 
 
     def set_password(self, password):
-        self.salt = Authentication.make_salt()
+        self.salt = Authentication.random_string(10)
         self.password = Authentication.salt_and_hash(password, self.salt)
 
 
@@ -29,6 +29,20 @@ class User(Base):
     def __repr__(self):
         return '<User {0} - {1}>'.format(self.id, self.email)
 
+        
+class PasswordToken(Base):
+    __tablename__ = 'password_tokens'
+    
+    id = Column(Integer, primary_key=True)
+    url_part = Column(String, nullable=False, unique=True)
+    user_id = Column(Integer, ForeignKey('users.id'), nullable=False)
+    timestamp = Column(DateTime, nullable=False)
+    
+    def __init__(self, user):
+        self.url_part = Authentication.random_string(30)
+        self.user_id = user.id
+        self.timestamp = datetime.now()
+    
 
 class UserGroup(Base):
     __tablename__ = 'user_groups'

@@ -6,13 +6,12 @@ import smtplib
 class Authentication:
 
     @staticmethod
-    def make_salt():
+    def random_string(length):
+        string = ''
+        for i in range(0, length):
+            string += choice(ascii_uppercase + ascii_lowercase + digits)
 
-        salt = ''
-        for i in range(0, 10):
-            salt += choice(ascii_uppercase + ascii_lowercase + digits)
-
-        return salt
+        return string
 
 
     @staticmethod
