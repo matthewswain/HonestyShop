@@ -6,6 +6,12 @@ import smtplib
 class Authentication:
 
     @staticmethod
+    def user_exists(email):
+        user = User.query.filter(User.email==email).first()
+        return user != None
+
+
+    @staticmethod
     def random_string(length):
         string = ''
         for i in range(0, length):

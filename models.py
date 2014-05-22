@@ -1,4 +1,4 @@
-from sqlalchemy import create_engine, Column, Integer, String, ForeignKey, DateTime
+from sqlalchemy import create_engine, Column, Integer, String, ForeignKey, DateTime, Boolean
 from sqlalchemy.orm import relationship, backref
 from database import Base
 from security import Authentication
@@ -12,6 +12,7 @@ class User(Base):
     salt = Column(String, nullable=False)
     password = Column(String, nullable=False)
     name = Column(String)
+    activated = Column(Boolean, nullable=False)
     purchases = relationship('Purchase', backref='user')
     payments = relationship('Payment', backref='user')
 
@@ -24,10 +25,16 @@ class User(Base):
     def __init__(self, email, password):
         self.email = email
         self.set_password(password)
+        self.activated = False
 
 
     def __repr__(self):
         return '<User {0} - {1}>'.format(self.id, self.email)
+
+    
+    @staticmethod
+    def get(email):
+        return User.query.filter(User.email==email).first()
 
         
 class PasswordToken(Base):

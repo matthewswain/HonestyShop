@@ -5,7 +5,6 @@ from security import Authentication
 app = Flask(__name__)
 
 
-## Debug section
 def login_required(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
@@ -31,10 +30,10 @@ def get_urls():
     }
     
 
-@app.route('/login/', methods=['GET', 'POST'])
+@app.route('/login/', methods=['GET','POST'])
 def login():
     if request.method == 'POST':
-        user = User.query.filter(User.email==request.form['email']).first()
+        user = User.get(request.form['email'])
         if user != None and  Authentication.authenticate(user, request.form['password']):
              session['email'] = request.form['email']
              return redirect(url_for('home'))
@@ -50,9 +49,15 @@ def logout():
     return redirect(url_for('login'))
 
 
-@app.route('/register/')
+@app.route('/register/', methods=['GET','POST'])
 def register():
-    return render_template('register.html', urls=get_urls())
+    if request.method == 'POST':
+        if User.get(request.form['email']) == None:
+            user = User(request.form['email'], request.form['password'])
+#            return user.url_part
+        return 'Already exists.'
+    else:
+        return render_template('register.html', urls=get_urls())
 
 
 if __name__ == '__main__':
