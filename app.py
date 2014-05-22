@@ -1,5 +1,6 @@
 from flask import Flask, render_template, url_for, request, redirect, session
 from functools import wraps
+from database import session as db
 from models import User
 from security import Authentication
 app = Flask(__name__)
@@ -58,6 +59,11 @@ def register():
         return 'Already exists.'
     else:
         return render_template('register.html', urls=get_urls())
+
+
+@app.teardown_appcontext
+def shutdown_session(exception=None):
+    db.remove()
 
 
 if __name__ == '__main__':
