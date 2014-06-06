@@ -29,7 +29,7 @@ def get_urls():
         'register':url_for('register'),
         'login':url_for('login')
     }
-    
+
 
 @app.route('/login/', methods=['GET','POST'])
 def login():
@@ -59,6 +59,14 @@ def register():
         return 'Already exists.'
     else:
         return render_template('register.html', urls=get_urls())
+
+
+@app.route('/buy/', methods=['GET','POST'])
+def buy():
+    if request.method == 'POST':
+        return request.form['item_id']
+    else:
+        return render_template('buy.html', urls=get_urls())
 
 
 @app.teardown_appcontext
