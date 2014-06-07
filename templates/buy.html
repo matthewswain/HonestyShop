@@ -1,11 +1,24 @@
 {% extends 'base.html' %}
 {% block body %}
 <h1>Buy</h1>
-<form target="" method="POST">
+<form target="" method="POST" name="buy_form" id="buy_form">
 	<select name="item_id" id="item_id">
-		<option value="1">Item 1</option>
-		<option value="2">Item 2</option>
+		{% for item in items %}
+			<option value="{{ item.id }}">{{ item.name }} ({{ item.price }})</option>
+		{% endfor %}
 	</select>
-	<input value="Buy" type="submit">
+	<input value="Buy" type="button" name="submit_button" id="submit_button" onClick="handleFormSubmit()">
 </form>
 {% endblock body %}
+
+{% block scripts %}
+<script language="javascript" type="text/javascript">
+
+	function handleFormSubmit(){
+		var submitButton = document.getElementById('submit_button');	
+		submitButton.setAttribute('disabled', 'true');
+		document.getElementById('buy_form').submit();
+	}
+
+</script>
+{% endblock scripts %}

@@ -11,3 +11,15 @@ Base.query = session.query_property()
 def init_db():
     import models
     Base.metadata.create_all(engine)
+
+    user = models.User('matthewswain@gmail.com', 'password')
+    session.add(user)
+
+    coke = models.Item('Coke', 45)
+    session.add(coke)
+
+    chocolate = models.Item('Chocolate', 40)
+    session.add(chocolate)
+
+    session.commit()
+    session.close()

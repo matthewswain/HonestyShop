@@ -1,7 +1,7 @@
 from flask import Flask, render_template, url_for, request, redirect, session
 from functools import wraps
 from database import session as db
-from models import User
+from models import User, Item, Purchase
 from security import Authentication
 app = Flask(__name__)
 
@@ -64,9 +64,15 @@ def register():
 @app.route('/buy/', methods=['GET','POST'])
 def buy():
     if request.method == 'POST':
-        return request.form['item_id']
+        user = User.get(session['email'])
+        item = Item.query.filter(Item.id==request.form['item_id']).first()
+        purchase = Purchase(user, item)
+        db.add(purchase)
+        db.commit()
+        return str(purchase.id)
     else:
-        return render_template('buy.html', urls=get_urls())
+        items = Item.query.all()
+        return render_template('buy.html', urls=get_urls(), items=items)
 
 
 @app.teardown_appcontext
