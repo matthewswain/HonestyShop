@@ -14,6 +14,26 @@ def login_required(f):
         return f(*args, **kwargs)
     return decorated_function              
 
+def group_required(groups):
+    def decorator(f):
+        @wraps(f)
+        def decorated_function(*args, **kwargs):
+            
+            user = User.get(session['email'])
+            authorized = False
+
+            for membership in user.memberships:
+                if membership.group.name in groups:
+                    authorized = True
+
+            if not authorized:
+                return redirect(url_for('home'))
+            else:
+                return f(*args, **kwargs)
+
+        return decorated_function
+    return decorator
+
 
 @app.route('/')
 @login_required
@@ -109,6 +129,13 @@ def history():
     user = User.get(session['email'])
     purchases = Purchase.query.filter(Purchase.user_id==user.id).order_by(Purchase.timestamp.desc())
     return render_template('history.html', urls=get_urls(), purchases=purchases)
+
+
+@app.route('/admin/')
+@login_required
+@group_required(['admin'])
+def admin():
+    return 'You are an admin.'
 
 
 @app.teardown_appcontext

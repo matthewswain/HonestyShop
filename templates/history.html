@@ -28,7 +28,7 @@ table, th, td {
 	</tr>
 	{% for purchase in purchases %}
 		<tr>
-			<td>{{ purchase.timestamp.strftime('%Y-%m-%d %H:%M') }}</td>
+			<td>{{ purchase.timestamp.strftime('%Y-%m-%d %H:%M:%S') }}</td>
 			<td>{{ purchase.item.name }}</td>
 			<td>{{ purchase.price }}</td>
 		</tr>

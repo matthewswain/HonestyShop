@@ -17,6 +17,7 @@ class User(Base):
     payments = relationship('Payment', backref='user')
     password_tokens = relationship('PasswordToken', backref='user')
     activation_tokens = relationship('ActivationToken', backref='user')
+    memberships = relationship('UserGroupMembership', backref='user')
 
 
     def set_password(self, password):
@@ -72,7 +73,28 @@ class UserGroup(Base):
 
     id = Column(Integer, primary_key=True)
     name = Column(String, unique=True, nullable=False)
+    memberships = relationship('UserGroupMembership', backref="group")
+
+    def __init__(self, name):
+        self.name = name
+
+    def __repr__(self):
+        return '<UserGroup {0} - {1}>'.format(self.id, self.name)
+
+
+class UserGroupMembership(Base):
+    __tablename__ = 'users_to_user_groups'
+
+    id = Column(Integer, primary_key=True)
+    user_id = Column(Integer, ForeignKey('users.id'), nullable=False)
+    group_id = Column(Integer, ForeignKey('user_groups.id'), nullable=False)
     
+    def __init__(self, user, user_group):
+        self.user_id = user.id
+        self.group_id = user_group.id
+
+    def __repr__(self):
+        return '<UserGroupMembership {0} - {1}>'.format(self.user.email, self.group.name)
 
 class Item(Base):
     __tablename__ = 'items'
