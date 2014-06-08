@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% block body %}
+<style>
+
+table {
+	border-collapse: collapse;
+}
+
+th, td {
+	width: 140px;
+	height: 30px;
+	text-align: center;
+}
+
+table, th, td {
+    border: 1px solid black;
+}
+
+</style>
+
+<h1>History</h1>
+<table>
+	<tr>
+		<th>Timestamp</th>
+		<th>Item</th>
+		<th>Price (pence)</th>
+	</tr>
+	{% for purchase in purchases %}
+		<tr>
+			<td>{{ purchase.timestamp.strftime('%Y-%m-%d %H:%M') }}</td>
+			<td>{{ purchase.item.name }}</td>
+			<td>{{ purchase.price }}</td>
+		</tr>
+	{% endfor %}
+</table>
+{% endblock body %}

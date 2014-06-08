@@ -12,14 +12,22 @@ def init_db():
     import models
     Base.metadata.create_all(engine)
 
-    user = models.User('matthewswain@gmail.com', 'password')
-    session.add(user)
+    first_user = models.User('matthewswain@gmail.com', 'password')
+    first_user.activated = True
+    session.add(first_user)
+
+    second_user = models.User('matthew.swain@vista.co.nz', 'password')
+    second_user.activated = True
+    session.add(second_user)
 
     coke = models.Item('Coke', 45)
     session.add(coke)
 
-    chocolate = models.Item('Chocolate', 40)
-    session.add(chocolate)
+    kitkat = models.Item('KitKat', 25)
+    session.add(kitkat)
+
+    twix = models.Item('Twix', 40)
+    session.add(twix)
 
     session.commit()
     session.close()

@@ -1,5 +1,17 @@
 {% extends 'base.html' %}
 {% block body %}
+<style>
+
+select {
+	width: 200px;
+}
+
+#submit_button {
+	width: 200px;
+}
+
+</style>
+
 <h1>Buy</h1>
 <form target="" method="POST" name="buy_form" id="buy_form">
 	<select name="item_id" id="item_id">
@@ -7,6 +19,7 @@
 			<option value="{{ item.id }}">{{ item.name }} ({{ item.price }})</option>
 		{% endfor %}
 	</select>
+	<br><br>
 	<input value="Buy" type="button" name="submit_button" id="submit_button" onClick="handleFormSubmit()">
 </form>
 {% endblock body %}

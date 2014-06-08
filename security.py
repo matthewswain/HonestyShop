@@ -28,7 +28,7 @@ class Authentication:
     @staticmethod
     def authenticate(user, password):
 
-        if user.password == Authentication.salt_and_hash(password, user.salt):
+        if user.password == Authentication.salt_and_hash(password, user.salt) and user.activated == True:
             return True
         else:
             return False

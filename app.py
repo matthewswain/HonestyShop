@@ -1,7 +1,7 @@
-from flask import Flask, render_template, url_for, request, redirect, session
+from flask import Flask, render_template, url_for, request, redirect, session, make_response
 from functools import wraps
 from database import session as db
-from models import User, Item, Purchase
+from models import User, Item, Purchase, ActivationToken, PasswordToken
 from security import Authentication
 app = Flask(__name__)
 
@@ -18,16 +18,17 @@ def login_required(f):
 @app.route('/')
 @login_required
 def home():
-    return 'Hello {0}'.format(session['email'])
+    return render_template('index.html', urls=get_urls())
 
 
 def get_urls():
     return {
         'home':url_for('home'),
-        'about':'',
-        'workflows':'',
         'register':url_for('register'),
-        'login':url_for('login')
+        'login':url_for('login'),
+        'logout':url_for('logout'),
+        'buy':url_for('buy'),
+        'history':url_for('history'),
     }
 
 
@@ -35,7 +36,7 @@ def get_urls():
 def login():
     if request.method == 'POST':
         user = User.get(request.form['email'])
-        if user != None and  Authentication.authenticate(user, request.form['password']):
+        if user != None and Authentication.authenticate(user, request.form['password']):
              session['email'] = request.form['email']
              return redirect(url_for('home'))
         else:
@@ -54,14 +55,39 @@ def logout():
 def register():
     if request.method == 'POST':
         if User.get(request.form['email']) == None:
+            
             user = User(request.form['email'], request.form['password'])
-#            return user.url_part
-        return 'Already exists.'
+            db.add(user)
+            db.commit()
+
+            token = ActivationToken(user)
+            db.add(token)
+            db.commit()
+
+            return token.url_part
+        else:
+            return 'Already exists.'
     else:
         return render_template('register.html', urls=get_urls())
 
 
+@app.route('/user/activate/<url_part>')
+def activate(url_part):
+
+    token = ActivationToken.query.filter(ActivationToken.url_part==url_part).first()
+    
+    if token != None:
+        user = token.user
+        user.activated = True
+        db.add(user)
+        db.commit()
+
+        return 'Success'
+    else:
+        return 'Failure'
+
 @app.route('/buy/', methods=['GET','POST'])
+@login_required
 def buy():
     if request.method == 'POST':
         user = User.get(session['email'])
@@ -69,10 +95,20 @@ def buy():
         purchase = Purchase(user, item)
         db.add(purchase)
         db.commit()
-        return str(purchase.id)
+        return redirect(url_for('history'))
     else:
         items = Item.query.all()
-        return render_template('buy.html', urls=get_urls(), items=items)
+        response = make_response(render_template('buy.html', urls=get_urls(), items=items))
+        response.headers['Cache-Control'] = 'no-cache'
+        return response
+
+
+@app.route('/history/')
+@login_required
+def history():
+    user = User.get(session['email'])
+    purchases = Purchase.query.filter(Purchase.user_id==user.id).order_by(Purchase.timestamp.desc())
+    return render_template('history.html', urls=get_urls(), purchases=purchases)
 
 
 @app.teardown_appcontext

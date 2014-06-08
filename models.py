@@ -15,6 +15,8 @@ class User(Base):
     activated = Column(Boolean, nullable=False)
     purchases = relationship('Purchase', backref='user')
     payments = relationship('Payment', backref='user')
+    password_tokens = relationship('PasswordToken', backref='user')
+    activation_tokens = relationship('ActivationToken', backref='user')
 
 
     def set_password(self, password):
@@ -36,9 +38,23 @@ class User(Base):
     def get(email):
         return User.query.filter(User.email==email).first()
 
-        
+
 class PasswordToken(Base):
     __tablename__ = 'password_tokens'
+    
+    id = Column(Integer, primary_key=True)
+    url_part = Column(String, nullable=False, unique=True)
+    user_id = Column(Integer, ForeignKey('users.id'), nullable=False)
+    timestamp = Column(DateTime, nullable=False)
+    
+    def __init__(self, user):
+        self.url_part = Authentication.random_string(30)
+        self.user_id = user.id
+        self.timestamp = datetime.now()
+    
+
+class ActivationToken(Base):
+    __tablename__ = 'activation_tokens'
     
     id = Column(Integer, primary_key=True)
     url_part = Column(String, nullable=False, unique=True)
