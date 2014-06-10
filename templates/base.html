@@ -6,6 +6,8 @@
 		{% include 'nav.html' %}
 	{% endblock nav %}
 	{% block body %}{% endblock body %}
-	{% block scripts %}{% endblock scripts %}
+	{% block scripts %}
+	<script language="javascript" type="text/javascript" src="{{ url_for('static', filename='honesty.js') }}"></script>
+	{% endblock scripts %}
 </body>
 </html>
