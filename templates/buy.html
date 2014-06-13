@@ -15,8 +15,9 @@ select {
 <h1>Buy</h1>
 <form target="" method="POST" name="buy_form" id="buy_form">
 	<select name="item_id" id="item_id">
-		{% for item in items %}
+		{% for item in data['items'] %}
 			<option value="{{ item.id }}">{{ item.name }} ({{ item.price }})</option>
+		}
 		{% endfor %}
 	</select>
 	<br><br>

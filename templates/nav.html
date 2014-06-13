@@ -1,6 +1,11 @@
 <nav>
-	| <a href="{{ urls['home'] }}">Home</a> |
-	<a href="{{ urls['buy'] }}">Buy</a> |
-	<a href="{{ urls['history'] }}">History</a> |
-	<a href="{{ urls['logout'] }}">Logout</a> |
+<ul class="nav nav-pills">
+{% for url in data['nav_urls'] %}
+	<li 
+	{% if data['nav_urls'][url] == data['active_url'] %}
+		class="active"
+	{% endif %}
+	><a href="{{ data['nav_urls'][url] }}">{{ url }}</a></li> 
+{% endfor %}
+</ul>
 </nav>

@@ -1,6 +1,9 @@
 <!DOCTYPE html>
-<html><head>
-<meta http-equiv="content-type" content="text/html; charset=windows-1252"></head>
+<html>
+<head>
+	<meta http-equiv="content-type" content="text/html; charset=windows-1252">
+	<link href="{{ url_for('static', filename='bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
+</head>
 <body>
 	{% block nav %}
 		{% include 'nav.html' %}
@@ -8,6 +11,8 @@
 	{% block body %}{% endblock body %}
 	{% block scripts %}
 	<script language="javascript" type="text/javascript" src="{{ url_for('static', filename='honesty.js') }}"></script>
+	<script language="javascript" type="text/javascript" src="{{ url_for('static', filename='jquery.min.js') }}"></script>
+	<script langauge="javascript" type="text/javascript" src="{{ url_for('static', filename='bootstrap/js/bootstrap.min.js') }}"></script>
 	{% endblock scripts %}
 </body>
 </html>

@@ -35,21 +35,22 @@ def group_required(groups):
     return decorator
 
 
-@app.route('/')
-@login_required
-def home():
-    return render_template('index.html', urls=get_urls())
-
-
 def get_urls():
     return {
         'home':url_for('home'),
-        'register':url_for('register'),
-        'login':url_for('login'),
-        'logout':url_for('logout'),
         'buy':url_for('buy'),
         'history':url_for('history'),
+        'logout':url_for('logout'),
     }
+
+
+@app.route('/')
+@login_required
+def home():
+    data = {}
+    data['nav_urls'] = get_urls()
+    data['active_url'] = url_for('home')
+    return render_template('index.html', data=data)
 
 
 @app.route('/login/', methods=['GET','POST'])
@@ -58,6 +59,7 @@ def login():
         user = User.get(request.form['email'])
         if user != None and Authentication.authenticate(user, request.form['password']):
              session['email'] = request.form['email']
+             session.permanent = True
              return redirect(url_for('home'))
         else:
             return redirect(url_for('login'))
@@ -117,8 +119,12 @@ def buy():
         db.commit()
         return redirect(url_for('history'))
     else:
-        items = Item.query.all()
-        response = make_response(render_template('buy.html', urls=get_urls(), items=items))
+        data = {}
+        data['nav_urls'] = get_urls()
+        data['active_url'] = url_for('buy')
+
+        data['items'] = Item.query.all()
+        response = make_response(render_template('buy.html', data=data))
         response.headers['Cache-Control'] = 'no-cache'
         return response
 
