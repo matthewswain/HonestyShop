@@ -1,6 +1,9 @@
 {% extends 'base.html' %}
 
 {% block body %}
-<h1>The Honesty Bar App</h1>
-<p>Welcome to The Honesty Bar App. Please select 'Buy' from the menu above to make a new purchase, or 'History' to see your previous transactions.</p>
+<div class="jumbotron">
+	<h1>Honesty Bar</h1>
+	<p>Welcome to the Honesty Bar app. Click the button below to record a purchase or select 'history' from the menu above to see your previous transactions.</p>
+	<a href="{{ url_for('buy') }}" class="btn btn-large btn-success">Buy Now</a>
+</div>
 {% endblock body %}

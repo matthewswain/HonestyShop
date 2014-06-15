@@ -1,11 +1,36 @@
-<nav>
-<ul class="nav nav-pills">
-{% for url in data['nav_urls'] %}
-	<li 
-	{% if data['nav_urls'][url] == data['active_url'] %}
-		class="active"
-	{% endif %}
-	><a href="{{ data['nav_urls'][url] }}">{{ url }}</a></li> 
-{% endfor %}
-</ul>
+<style>
+body {
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
+
+.navbar {
+  margin-bottom: 20px;
+}
+</style>
+
+<nav class="navbar navbar-default" role="navigation">
+	<div class="container-fluid">
+		<div class="navbar-header">
+      		<a class="navbar-brand" href="{{ url_for('home') }}">Honesty Bar</a>
+      		<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#collapsing_navigation_bar">
+			    <span class="icon-bar"></span>
+			    <span class="icon-bar"></span>
+			    <span class="icon-bar"></span>
+			</button>
+		</div>
+		<div class="collapse navbar-collapse" id="collapsing_navigation_bar">
+			<ul class="nav navbar-nav">
+			{% for url in data['nav_urls'] %}
+				<li 
+				{% if url[1] == data['active_url'] %}
+					class="active"
+				{% endif %}
+				>
+					<a href="{{ url[1] }}">{{ url[0] }}</a>
+				</li> 
+			{% endfor %}
+			</ul>
+		</div>
+	</div>
 </nav>

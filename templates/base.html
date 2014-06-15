@@ -2,17 +2,29 @@
 <html>
 <head>
 	<meta http-equiv="content-type" content="text/html; charset=windows-1252">
-	<link href="{{ url_for('static', filename='bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<link href="{{ url_for('static', filename='bootstrap/css/bootstrap.min.css') }}" rel="stylesheet" meida="screen">
+	<title>Honesty Bar</title>
 </head>
 <body>
+<div class="container">
 	{% block nav %}
 		{% include 'nav.html' %}
 	{% endblock nav %}
-	{% block body %}{% endblock body %}
+	
+	{% block body %}
+	{% endblock body %}
+	
+	{% block footer %}
+		{% include 'footer.html' %}
+	{% endblock footer %}
+
 	{% block scripts %}
 	<script language="javascript" type="text/javascript" src="{{ url_for('static', filename='honesty.js') }}"></script>
 	<script language="javascript" type="text/javascript" src="{{ url_for('static', filename='jquery.min.js') }}"></script>
 	<script langauge="javascript" type="text/javascript" src="{{ url_for('static', filename='bootstrap/js/bootstrap.min.js') }}"></script>
 	{% endblock scripts %}
+</div>
 </body>
 </html>

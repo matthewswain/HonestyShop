@@ -7,7 +7,7 @@ class Authentication:
 
     @staticmethod
     def user_exists(email):
-        user = User.query.filter(User.email==email).first()
+        user = User.query.filter(User.email==email.lower()).first()
         return user != None
 
 

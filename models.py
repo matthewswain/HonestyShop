@@ -26,7 +26,7 @@ class User(Base):
 
 
     def __init__(self, email, password):
-        self.email = email
+        self.email = email.lower()
         self.set_password(password)
         self.activated = False
 
@@ -37,7 +37,7 @@ class User(Base):
     
     @staticmethod
     def get(email):
-        return User.query.filter(User.email==email).first()
+        return User.query.filter(User.email==email.lower()).first()
 
 
 class PasswordToken(Base):

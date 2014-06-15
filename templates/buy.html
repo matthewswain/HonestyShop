@@ -2,25 +2,26 @@
 {% block body %}
 <style>
 
-select {
-	width: 200px;
-}
-
-#submit_button {
-	width: 200px;
-}
-
 </style>
 
-<h1>Buy</h1>
-<form target="" method="POST" name="buy_form" id="buy_form">
-	<select name="item_id" id="item_id">
-		{% for item in data['items'] %}
-			<option value="{{ item.id }}">{{ item.name }} ({{ item.price }})</option>
-		}
-		{% endfor %}
-	</select>
-	<br><br>
-	<input value="Buy" type="button" name="submit_button" id="submit_button" onClick="handleFormSubmit()">
+<div class="container">
+
+<div class="col-lg-4 col-md-4 col-sm-6">
+<form class="form-horizontal" target="" method="POST" id="buy_form">
+<fieldset>
+<legend>Buy</legend>
+	<div class="form-group">
+		<label for="item_id">Select item</label>
+		<select name="item_id" id="item_id" class="form-control" placeholder="Select item">
+			{% for item in data['items'] %}
+				<option value="{{ item.id }}">{{ item.name }} ({{ item.price }})</option>
+			{% endfor %}
+		</select>
+	</div>
+	<button type="button" id="submit_button" onClick="handleFormSubmit()" class="btn btn-primary btn-lg">Buy</button>
+</fieldset>
 </form>
+</div>
+</div>
+<br>
 {% endblock body %}

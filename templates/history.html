@@ -18,7 +18,7 @@ table, th, td {
 }
 
 </style>
-
+<div class="container">
 <h1>History</h1>
 <table>
 	<tr>
@@ -26,7 +26,7 @@ table, th, td {
 		<th>Item</th>
 		<th>Price (pence)</th>
 	</tr>
-	{% for purchase in purchases %}
+	{% for purchase in data['purchases'] %}
 		<tr>
 			<td>{{ purchase.timestamp.strftime('%Y-%m-%d %H:%M:%S') }}</td>
 			<td>{{ purchase.item.name }}</td>
@@ -34,4 +34,5 @@ table, th, td {
 		</tr>
 	{% endfor %}
 </table>
+</div>
 {% endblock body %}

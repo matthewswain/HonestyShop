@@ -36,12 +36,12 @@ def group_required(groups):
 
 
 def get_urls():
-    return {
-        'home':url_for('home'),
-        'buy':url_for('buy'),
-        'history':url_for('history'),
-        'logout':url_for('logout'),
-    }
+    return [
+        ('Home',url_for('home')),
+        ('Buy',url_for('buy')),
+        ('History',url_for('history')),
+        ('Logout',url_for('logout')),
+    ]
 
 
 @app.route('/')
@@ -132,9 +132,13 @@ def buy():
 @app.route('/history/')
 @login_required
 def history():
+    data = {}
+    data['nav_urls'] = get_urls()
+    data['active_url'] = url_for('history')
     user = User.get(session['email'])
     purchases = Purchase.query.filter(Purchase.user_id==user.id).order_by(Purchase.timestamp.desc())
-    return render_template('history.html', urls=get_urls(), purchases=purchases)
+    data['purchases'] = purchases
+    return render_template('history.html', data=data)
 
 
 @app.route('/admin/')
@@ -151,4 +155,4 @@ def shutdown_session(exception=None):
 
 if __name__ == '__main__':
     app.secret_key = 'Development secret key'
-    app.run(debug=True)
+    app.run(debug=True, host='0.0.0.0')
