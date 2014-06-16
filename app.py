@@ -109,7 +109,7 @@ def activate(url_part):
         db.add(user)
         db.commit()
 
-        return 'Success'
+        return redirect(url_for('login'))
     else:
         return 'Failure'
 
