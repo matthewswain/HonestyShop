@@ -7,11 +7,11 @@
 
 <div class="row">
 	<div class="col-md-6 col-md-offset-3">
-		<div class="jumbotron">
+		<div class="text-center">
 			<h1>Honesty Bar</h1>
 			<p>Welcome to the Honesty Bar app. Please login below to continue.</p>
-		
-		<legend></legend>
+		</div>
+		<hr>
 		<form target="" method="POST" role="form" class="form-horizontal">
 			<div class="form-group">
 				<div class="col-md-3">
@@ -29,12 +29,15 @@
 					<input id="password" name="password" type="password" class="form-control col-md-9">
 				</div>
 			</div>
-			<div class="text-center">
+			<div class="text-right">
 				<input value="Login" type="submit" class="btn btn-primary btn-lg">
+			</div>
+			<hr>
+			<div class="text-center">
 				<p style="margin-top: 15px;">Not registered yet? Click <a href="{{ url_for('register') }}">here</a> to go to the registration page.</p>
 			</div>
 		</form>
-		</div>
+		<hr>
 	</div>
 </div>
 

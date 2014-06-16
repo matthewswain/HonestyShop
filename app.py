@@ -2,7 +2,7 @@ from flask import Flask, render_template, url_for, request, redirect, session, m
 from functools import wraps
 from database import session as db
 from models import User, Item, Purchase, ActivationToken, PasswordToken
-from security import Authentication
+from security import Authentication, Email
 app = Flask(__name__)
 
 
@@ -85,6 +85,11 @@ def register():
             token = ActivationToken(user)
             db.add(token)
             db.commit()
+
+            activation_url = url_for('activate', url_part=token.url_part)
+            email_body = render_template('email/register.html', activation_url=activation_url)
+            #Email.send()
+            return email_body
 
             return token.url_part
         else:

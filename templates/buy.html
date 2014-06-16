@@ -3,11 +3,12 @@
 
 <div class="row">
 	<div class="col-sm-6 col-sm-offset-3">
-		<legend>Buy</legend>
+		<h1 class="text-center">Buy</h1>
+		<hr>
 		<form class="form-horizontal" target="" method="POST" id="buy_form">	
 			<div class="form-group">
 				<div class="col-md-3">
-					<label class="control-label" for="item_id">Select item</label>
+					<label class="control-label" for="item_id">Item</label>
 				</div>
 				<div class="col-md-9">
 					<select name="item_id" id="item_id" class="form-control" placeholder="Select item">
@@ -18,9 +19,10 @@
 				</div>
 			</div>
 			<div class="text-center">
-				<button type="button" id="submit_button" onClick="handleFormSubmit()" class="btn btn-success btn-lg">Buy</button>
+				<button type="button" id="submit_button" onClick="submitForm('buy_form')" class="btn btn-success btn-lg">Buy</button>
 			</div>
 		</form>
+		<hr>
 	</div>
 </div>
 {% endblock body %}
