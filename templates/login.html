@@ -12,6 +12,9 @@
 			<p>Welcome to the Honesty Bar app. Please login below to continue.</p>
 		</div>
 		<hr>
+		{% for category, message in get_flashed_messages(with_categories=True) %}
+			<div class="{{ category }} text-center">{{ message }}</div>
+		{% endfor %}
 		<form target="" method="POST" role="form" class="form-horizontal">
 			<div class="form-group">
 				<div class="col-md-3">

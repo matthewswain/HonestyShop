@@ -1,4 +1,4 @@
-from flask import Flask, render_template, url_for, request, redirect, session, make_response
+from flask import Flask, render_template, url_for, request, redirect, session, make_response, flash, get_flashed_messages
 from functools import wraps
 from database import session as db
 from models import User, Item, Purchase, ActivationToken, PasswordToken
@@ -65,6 +65,7 @@ def login():
              session.permanent = True
              return redirect(url_for('home'))
         else:
+            flash('Login failed, please retry.', 'alert alert-danger')
             return redirect(url_for('login'))
     else:
         return render_template('login.html', urls=get_urls())
@@ -112,6 +113,7 @@ def activate(url_part):
         db.add(user)
         db.commit()
 
+        flash('Account activated, please login.', 'alert alert-success')
         return redirect(url_for('login'))
     else:
         return 'Failure'
