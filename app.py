@@ -3,8 +3,11 @@ from functools import wraps
 from database import session as db
 from models import User, Item, Purchase, ActivationToken, PasswordToken
 from security import Authentication, Email
-app = Flask(__name__)
+from configobj import ConfigObj
 
+config = ConfigObj('app.config')
+
+app = Flask(__name__)
 
 def login_required(f):
     @wraps(f)
@@ -87,6 +90,7 @@ def register():
             db.commit()
 
             activation_url = url_for('activate', url_part=token.url_part)
+            activation_url = config['domain'] + activation_url
             email_body = render_template('email/register.html', activation_url=activation_url)
             
             Email.send(user.email, 'Honesty Bar - Activate Account', email_body)

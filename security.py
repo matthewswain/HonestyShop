@@ -2,6 +2,7 @@ from random import choice
 from hashlib import sha512
 from string import ascii_uppercase, ascii_lowercase, digits
 import smtplib
+from email.mime.text import MIMEText
 from configobj import ConfigObj
 
 config = ConfigObj('app.config')
@@ -42,8 +43,14 @@ class Email:
     @staticmethod
     def send(to_email, subject, body):
 
-        content = 'To:{0}\nFrom:{1}\nSubject:{2}\n{3}\n\n'.format(to_email, config['smtp_sender'], subject, body)
+        message = MIMEText(body, 'html')
+        message['To'] = to_email
+        message['From'] = config['smtp_sender']
+        message['Subject'] = subject
+
         smtp = smtplib.SMTP(config['smtp_server'], config['smtp_port'])
         smtp.starttls()
         smtp.login(config['smtp_username'], config['smtp_password'])
-        smtp.sendmail(config['smtp_sender'], to_email, content)
+        smtp.sendmail(config['smtp_sender'], to_email, message.as_string())
+        smtp.quit()
+
