@@ -1,0 +1,3 @@
+ConfigObj
+Flask
+SqlAlchemy

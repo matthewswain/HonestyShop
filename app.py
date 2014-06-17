@@ -90,13 +90,13 @@ def register():
             db.commit()
 
             activation_url = url_for('activate', url_part=token.url_part)
-            activation_url = config['domain'] + activation_url
+            activation_url = config['base_url'] + activation_url
             email_body = render_template('email/register.html', activation_url=activation_url)
             
             Email.send(user.email, 'Honesty Bar - Activate Account', email_body)
-            return email_body
-        else:
-            return 'Already exists.'
+        
+        return redirect(url_for('login'))
+        
     else:
         return render_template('register.html', urls=get_urls())
 
