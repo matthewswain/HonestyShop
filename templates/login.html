@@ -35,6 +35,12 @@
 			<hr>
 			<div class="text-center">
 				<p style="margin-top: 15px;">Not registered yet? Click <a href="{{ url_for('register') }}">here</a> to go to the registration page.</p>
+				<!--[if IE]>
+				<p>Still using Internet Explorer? Really?</p>
+				<![endif]-->
+				<![if !IE]>
+					<p>Not using Internet Explorer? Well done.</p>
+				<![endif]>
 			</div>
 		</form>
 		<hr>
