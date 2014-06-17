@@ -2,6 +2,9 @@ from random import choice
 from hashlib import sha512
 from string import ascii_uppercase, ascii_lowercase, digits
 import smtplib
+from configobj import ConfigObj
+
+config = ConfigObj('app.config')
 
 class Authentication:
 
@@ -37,10 +40,10 @@ class Authentication:
 class Email:
 
     @staticmethod
-    def send(to_email, from_email, subject, body):
+    def send(to_email, subject, body):
 
-        content = 'To:{0}\nFrom:{1}\nSubject:{2}\n{3}\n\n'.format(to_email, from_email, subject, body)
-        smtp = smtplib.SMTP("smtp.gmail.com", 587)
+        content = 'To:{0}\nFrom:{1}\nSubject:{2}\n{3}\n\n'.format(to_email, config['smtp_sender'], subject, body)
+        smtp = smtplib.SMTP(config['smtp_server'], config['smtp_port'])
         smtp.starttls()
-        smtp.login('username', 'password')
-        smtp.sendmail(from_email, to_email, content)
+        smtp.login(config['smtp_username'], config['smtp_password'])
+        smtp.sendmail(config['smtp_sender'], to_email, content)

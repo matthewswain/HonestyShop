@@ -88,10 +88,9 @@ def register():
 
             activation_url = url_for('activate', url_part=token.url_part)
             email_body = render_template('email/register.html', activation_url=activation_url)
-            #Email.send()
+            
+            Email.send(user.email, 'Honesty Bar - Activate Account', email_body)
             return email_body
-
-            return token.url_part
         else:
             return 'Already exists.'
     else:
