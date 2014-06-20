@@ -6,8 +6,8 @@ from security import Authentication, Email
 from configobj import ConfigObj
 
 config = ConfigObj('app.config')
-
 app = Flask(__name__)
+
 
 def login_required(f):
     @wraps(f)
@@ -16,6 +16,7 @@ def login_required(f):
             return redirect(url_for('login'))
         return f(*args, **kwargs)
     return decorated_function              
+
 
 def group_required(groups):
     def decorator(f):
@@ -95,7 +96,11 @@ def register():
             email_body = render_template('email/register.html', activation_url=activation_url)
             
             Email.send(user.email, 'Honesty Bar - Activate Account', email_body)
-        
+
+            flash('Account created, please activate your account using the link in your welcome email.', 'alert alert-success')        
+        else:
+            flash('An account with that email address already exists, please login.', 'alert alert-warning')    
+
         return redirect(url_for('login'))
         
     else:
@@ -117,6 +122,7 @@ def activate(url_part):
         return redirect(url_for('login'))
     else:
         return 'Failure'
+
 
 @app.route('/buy/', methods=['GET','POST'])
 @login_required
