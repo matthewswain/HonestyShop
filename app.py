@@ -63,6 +63,7 @@ def login():
         user = User.get(request.form['email'])
         if user != None and Authentication.authenticate(user, request.form['password']):
              session['email'] = request.form['email']
+             session['is_admin'] = user.is_member('admin')
              session.permanent = True
              return redirect(url_for('home'))
         else:

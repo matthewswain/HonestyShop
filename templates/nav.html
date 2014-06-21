@@ -10,6 +10,7 @@
 			</div>
 			<div class="collapse navbar-collapse" id="collapsing_navigation_bar">
 				<ul class="nav navbar-nav">
+				
 				{% for url in data['nav_urls'] %}
 					<li 
 					{% if url[1] == data['active_url'] %}
@@ -19,6 +20,17 @@
 						<a href="{{ url[1] }}">{{ url[0] }}</a>
 					</li> 
 				{% endfor %}
+				
+				{% if session['is_admin'] == True %}
+					<li class="dropdown">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown">Admin<b class="caret"></b></a>
+						<ul class="dropdown-menu">
+							<li><a href="">Admin 1</a></li>
+							<li><a href="">Admin 2</a></li>
+						</ul>
+					</li>
+				{% endif %}
+
 				</ul>
 			</div>
 	</nav>

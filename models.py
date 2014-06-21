@@ -24,6 +24,24 @@ class User(Base):
         self.salt = Authentication.random_string(10)
         self.password = Authentication.salt_and_hash(password, self.salt)
 
+    def get_group_names(self):
+        group_names = []
+
+        for membership in self.memberships:
+            group_names.append(membership.group.name)
+
+        return group_names
+
+
+    def is_member(self, group_name):
+        
+        group_names = self.get_group_names()
+
+        if group_name in group_names:
+            return True
+        else:
+            return False
+
 
     def __init__(self, email, password):
         self.email = email.lower()
