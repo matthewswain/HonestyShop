@@ -165,6 +165,51 @@ def admin():
     return 'You are an admin.'
 
 
+@app.route('/items/')
+@login_required
+@group_required(['admin'])
+def items():
+    data = {}
+    data['nav_urls'] = get_urls()
+    data['active_url'] = url_for('items')
+    data['items'] = Item.query.all()
+    return render_template('items.html', data=data)
+
+
+@app.route('/items/new/', methods=['GET','POST'])
+@login_required
+@group_required(['admin'])
+def items_new():
+    if request.method == 'POST':
+        item = Item(request.form['name'], request.form['price'])
+        db.add(item)
+        db.commit()
+        return redirect(url_for('items_edit', item_id=item.id))
+    else:
+        data = {}
+        data['nav_urls'] = get_urls()
+        data['active_url'] = url_for('items_new')
+        return render_template('items_new.html', data=data)
+
+
+@app.route('/items/edit/<item_id>', methods=['GET','POST'])
+@login_required
+@group_required(['admin'])
+def items_edit(item_id):
+    if request.method == 'POST':
+        item = Item.query.filter(Item.id==item_id).first()
+        item.name = request.form['name']
+        item.price = request.form['price']
+        db.add(item)
+        db.commit()
+        return redirect(url_for('items'))
+    else:
+        data = {}
+        data['nav_urls'] = get_urls()
+        data['active_url'] = url_for('items_edit', item_id=item_id)
+        data['item'] = Item.query.filter(Item.id==item_id).first()
+        return render_template('items_edit.html', data=data)
+
 @app.teardown_appcontext
 def shutdown_session(exception=None):
     db.remove()

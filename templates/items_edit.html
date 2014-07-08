@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% block body %}
+
+<div class="row">
+	<div class="col-sm-6 col-sm-offset-3">
+		<h1 class="text-center">Edit Item</h1>
+		<hr>
+		<form class="form-horizontal" target="" method="POST" id="item_form">	
+			<div class="form-group">
+				<div class="col-md-3">
+					<label class="control-label" for="item_id">ID</label>
+				</div>
+				<div class="col-md-9">
+					<input id="item_id" name="item_id" type="text" class="form-control" disabled="true" value="{{ data['item'].id }}">	
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-md-3">
+					<label class="control-label" for="name">Name</label>
+				</div>
+				<div class="col-md-9">
+					<input id="name" name="name" type="text" class="form-control" value="{{ data['item'].name }}">	
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-md-3">
+					<label class="control-label" for="price">Price</label>
+				</div>
+				<div class="col-md-9">
+					<input id="price" name="price" type="text" class="form-control" value="{{ data['item'].price }}">	
+				</div>
+			</div>
+			<div class="text-center">
+				<button type="button" id="cancel_button" class="btn btn-warning btn-lg" href="{{ url_for('items') }}">Cancel</button>
+				<button type="submit" id="submit_button" class="btn btn-success btn-lg">Save</button>
+			</div>
+		</form>
+		<hr>
+	</div>
+</div>
+{% endblock body %}
