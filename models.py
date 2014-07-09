@@ -120,8 +120,9 @@ class Item(Base):
     id = Column(Integer, primary_key=True)
     name = Column(String, unique=True)
     price = Column(Integer)
-    Purchases = relationship('Purchase', backref='item')
-
+    ##########################################################
+    active = Column(Boolean, nullable=False, default=True)
+    purchases = relationship('Purchase', backref='item')
     
     def __init__(self, name, price):
         self.name = name

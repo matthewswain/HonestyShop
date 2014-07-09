@@ -140,7 +140,7 @@ def buy():
         data['nav_urls'] = get_urls()
         data['active_url'] = url_for('buy')
 
-        data['items'] = Item.query.all()
+        data['items'] = Item.query.filter(Item.active==True)
         response = make_response(render_template('buy.html', data=data))
         response.headers['Cache-Control'] = 'no-cache'
         return response
@@ -184,7 +184,7 @@ def items_new():
         item = Item(request.form['name'], request.form['price'])
         db.add(item)
         db.commit()
-        return redirect(url_for('items_edit', item_id=item.id))
+        return redirect(url_for('items'))
     else:
         data = {}
         data['nav_urls'] = get_urls()
@@ -197,6 +197,14 @@ def items_new():
 @group_required(['admin'])
 def items_edit(item_id):
     if request.method == 'POST':
+
+        if request.form['name'].strip() == '' or request.form['price'].strip() == '':
+            #flash please fill all fields
+            return redirect(url_for('items_edit', item_id=item_id))
+        if request.form['price'].isdigit() == False:
+            #flash price must be numeric
+            return redirect(url_for('items_edit', item_id=item_id))
+
         item = Item.query.filter(Item.id==item_id).first()
         item.name = request.form['name']
         item.price = request.form['price']
