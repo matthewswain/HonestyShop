@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+{% block body %}
+
+<div class="row">
+	<div class="col-sm-6 col-sm-offset-3">
+		<h1 class="text-center">New Item</h1>
+		<hr>
+		<form class="form-horizontal" target="" method="POST" id="item_form">	
+			<div class="form-group">
+				<div class="col-md-3">
+					<label class="control-label" for="id">ID</label>
+				</div>
+				<div class="col-md-9">
+					{{ form.id(class_='form-control', disabled='true') }}
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-md-3">
+					<label class="control-label" for="name">Name</label>
+				</div>
+				<div class="col-md-9">
+					{{ form.name(class_='form-control') }}
+				</div>
+			</div>
+			{% if form.name.errors %}
+        		{% for error in form.name.errors %}
+        		<div class="col-md-3"></div>
+        		<div class="col-md-9">
+					<div class="alert alert-danger text-center" role="alert">Name: {{ error }}</div>
+				</div>
+        		{% endfor %}
+    		{% endif %}
+			<div class="form-group">
+				<div class="col-md-3">
+					<label class="control-label" for="price">Price</label>
+				</div>
+				<div class="col-md-9">
+					<div class="input-group">
+	  					<span class="input-group-addon">£</span>
+						{{ form.price(class_='form-control') }}
+					</div>
+				</div>
+			</div>
+			{% if form.price.errors %}
+        		{% for error in form.price.errors %}
+        		<div class="col-md-3"></div>
+        		<div class="col-md-9">
+        			<div class="alert alert-danger text-center" role="alert">Price: {{ error }}</div>
+        		</div>
+        		{% endfor %}
+    		{% endif %}
+			<div class="text-center">
+				<button type="submit" id="submit_button" class="btn btn-success btn-lg">Save</button>
+			</div>
+		</form>
+		<hr>
+	</div>
+</div>
+{% endblock body %}

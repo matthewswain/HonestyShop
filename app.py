@@ -2,8 +2,10 @@ from flask import Flask, render_template, url_for, request, redirect, session, m
 from functools import wraps
 from database import session as db
 from models import User, Item, Purchase, ActivationToken, PasswordToken
+from forms import ItemForm
 from security import Authentication, Email
 from configobj import ConfigObj
+
 
 config = ConfigObj('app.config')
 app = Flask(__name__)
@@ -192,7 +194,7 @@ def items_new():
         return render_template('items_new.html', data=data)
 
 
-@app.route('/items/edit/<item_id>', methods=['GET','POST'])
+@app.route('/items/edit/<item_id>/', methods=['GET','POST'])
 @login_required
 @group_required(['admin'])
 def items_edit(item_id):
@@ -217,6 +219,22 @@ def items_edit(item_id):
         data['active_url'] = url_for('items_edit', item_id=item_id)
         data['item'] = Item.query.filter(Item.id==item_id).first()
         return render_template('items_edit.html', data=data)
+
+@app.route('/items/new/new/', methods=['GET','POST'])
+@login_required
+@group_required(['admin'])
+def items_new_new():
+    form = ItemForm(request.form)
+    if request.method == 'POST' and form.validate():
+        item = Item(form.name.data, form.price.data)
+        db.add(item)
+        db.commit()
+        return redirect(url_for('items'))
+    else:
+        data = {}
+        data['nav_urls'] = get_urls()
+        data['active_url'] = url_for('items_new_new')
+        return render_template('items_new_new.html', form=form, data=data)
 
 @app.teardown_appcontext
 def shutdown_session(exception=None):
