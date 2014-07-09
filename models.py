@@ -1,4 +1,4 @@
-from sqlalchemy import create_engine, Column, Integer, String, ForeignKey, DateTime, Boolean
+from sqlalchemy import create_engine, Column, Integer, String, ForeignKey, DateTime, Boolean, Numeric
 from sqlalchemy.orm import relationship, backref
 from database import Base
 from security import Authentication
@@ -119,8 +119,7 @@ class Item(Base):
 
     id = Column(Integer, primary_key=True)
     name = Column(String, unique=True)
-    price = Column(Integer)
-    ##########################################################
+    price = Column(Numeric(6,2))
     active = Column(Boolean, nullable=False, default=True)
     purchases = relationship('Purchase', backref='item')
     
@@ -139,7 +138,7 @@ class Purchase(Base):
     id = Column(Integer, primary_key=True)
     user_id = Column(Integer, ForeignKey('users.id'), nullable=False)
     item_id = Column(Integer, ForeignKey('items.id'), nullable=False)
-    price = Column(Integer, nullable=False)
+    price = Column(Numeric(6,2), nullable=False)
     timestamp = Column(DateTime, nullable=False)
 
 
@@ -159,7 +158,7 @@ class Payment(Base):
     
     id = Column(Integer, primary_key=True)
     user_id = Column(Integer, ForeignKey('users.id'), nullable=False)
-    value = Column(Integer, nullable=False)
+    value = Column(Numeric(6,2), nullable=False)
     timestamp = Column(DateTime, nullable=False)
 
 

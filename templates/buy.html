@@ -13,7 +13,7 @@
 				<div class="col-md-9">
 					<select name="item_id" id="item_id" class="form-control" placeholder="Select item">
 						{% for item in data['items'] %}
-							<option value="{{ item.id }}">{{ item.name }} ({{ item.price }})</option>
+							<option value="{{ item.id }}">{{ item.name }} - £{{ item.price }}</option>
 						{% endfor %}
 					</select>
 				</div>

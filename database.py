@@ -31,15 +31,15 @@ def init_db():
     session.add(second_user)
     session.commit()
 
-    coke = models.Item('Coke', 45)
+    coke = models.Item('Coke', 0.45)
     session.add(coke)
     session.commit()
 
-    kitkat = models.Item('KitKat', 25)
+    kitkat = models.Item('KitKat', 0.25)
     session.add(kitkat)
     session.commit()
 
-    twix = models.Item('Twix', 40)
+    twix = models.Item('Twix', 0.40)
     session.add(twix)
     session.commit()
 
