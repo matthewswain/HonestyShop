@@ -2,7 +2,7 @@ from flask import Flask, render_template, url_for, request, redirect, session, m
 from functools import wraps
 from database import session as db
 from models import User, Item, Purchase, ActivationToken, PasswordToken
-from forms import ItemForm
+from forms import ItemForm, LoginForm
 from security import Authentication, Email
 from configobj import ConfigObj
 
@@ -61,7 +61,8 @@ def home():
 
 @app.route('/login/', methods=['GET','POST'])
 def login():
-    if request.method == 'POST':
+    form = LoginForm(request.form)
+    if request.method == 'POST' and form.validate():
         user = User.get(request.form['email'])
         if user != None and Authentication.authenticate(user, request.form['password']):
              session['email'] = request.form['email']
@@ -70,9 +71,9 @@ def login():
              return redirect(url_for('home'))
         else:
             flash('Login failed, please retry.', 'alert alert-danger')
-            return redirect(url_for('login'))
+            return redirect(url_for('login'), form=form)
     else:
-        return render_template('login.html', urls=get_urls())
+        return render_template('login.html', urls=get_urls(), form=form)
 
 
 @app.route('/logout/')
@@ -83,7 +84,8 @@ def logout():
 
 @app.route('/register/', methods=['GET','POST'])
 def register():
-    if request.method == 'POST':
+    form = LoginForm(request.form)
+    if request.method == 'POST' and form.validate():
         if User.get(request.form['email']) == None:
             
             user = User(request.form['email'], request.form['password'])
@@ -107,7 +109,7 @@ def register():
         return redirect(url_for('login'))
         
     else:
-        return render_template('register.html', urls=get_urls())
+        return render_template('register.html', urls=get_urls(), form=form)
 
 
 @app.route('/user/activate/<url_part>')
@@ -160,13 +162,6 @@ def history():
     return render_template('history.html', data=data)
 
 
-@app.route('/admin/')
-@login_required
-@group_required(['admin'])
-def admin():
-    return 'You are an admin.'
-
-
 @app.route('/items/')
 @login_required
 @group_required(['admin'])
@@ -182,48 +177,6 @@ def items():
 @login_required
 @group_required(['admin'])
 def items_new():
-    if request.method == 'POST':
-        item = Item(request.form['name'], request.form['price'])
-        db.add(item)
-        db.commit()
-        return redirect(url_for('items'))
-    else:
-        data = {}
-        data['nav_urls'] = get_urls()
-        data['active_url'] = url_for('items_new')
-        return render_template('items_new.html', data=data)
-
-
-@app.route('/items/edit/<item_id>/', methods=['GET','POST'])
-@login_required
-@group_required(['admin'])
-def items_edit(item_id):
-    if request.method == 'POST':
-
-        if request.form['name'].strip() == '' or request.form['price'].strip() == '':
-            #flash please fill all fields
-            return redirect(url_for('items_edit', item_id=item_id))
-        if request.form['price'].isdigit() == False:
-            #flash price must be numeric
-            return redirect(url_for('items_edit', item_id=item_id))
-
-        item = Item.query.filter(Item.id==item_id).first()
-        item.name = request.form['name']
-        item.price = request.form['price']
-        db.add(item)
-        db.commit()
-        return redirect(url_for('items'))
-    else:
-        data = {}
-        data['nav_urls'] = get_urls()
-        data['active_url'] = url_for('items_edit', item_id=item_id)
-        data['item'] = Item.query.filter(Item.id==item_id).first()
-        return render_template('items_edit.html', data=data)
-
-@app.route('/items/new/new/', methods=['GET','POST'])
-@login_required
-@group_required(['admin'])
-def items_new_new():
     form = ItemForm(request.form)
     if request.method == 'POST' and form.validate():
         item = Item(form.name.data, form.price.data)
@@ -233,8 +186,33 @@ def items_new_new():
     else:
         data = {}
         data['nav_urls'] = get_urls()
-        data['active_url'] = url_for('items_new_new')
-        return render_template('items_new_new.html', form=form, data=data)
+        data['active_url'] = url_for('items_new')
+        return render_template('items_edit.html', form=form, data=data)
+
+
+@app.route('/items/edit/<item_id>/', methods=['GET','POST'])
+@login_required
+@group_required(['admin'])
+def items_edit(item_id):
+    form = ItemForm(request.form)
+
+    if request.method == 'POST' and form.validate():
+        item = Item.query.filter(Item.id==item_id).first()
+        item.name = form.name.data
+        item.price = form.price.data
+        db.add(item)
+        db.commit()
+        return redirect(url_for('items'))
+    else:
+        data = {}
+        data['nav_urls'] = get_urls()
+        data['active_url'] = url_for('items_edit', item_id=item_id)
+        item = Item.query.filter(Item.id==item_id).first()
+        form.id.data = item.id
+        form.name.data = item.name
+        form.price.data = item.price
+        return render_template('items_edit.html', data=data, form=form)
+
 
 @app.teardown_appcontext
 def shutdown_session(exception=None):

@@ -3,7 +3,12 @@
 
 <div class="row">
 	<div class="col-sm-6 col-sm-offset-3">
-		<h1 class="text-center">Edit Item</h1>
+		{% if form.id.data %}
+			<h1 class="text-center">Edit Item</h1>
+		{% else %}
+			<h1 class="text-center">New Item</h1>
+		{% endif %}
+		
 		<hr>
 		<form class="form-horizontal" target="" method="POST" id="item_form">	
 			<div class="form-group">
@@ -11,7 +16,11 @@
 					<label class="control-label" for="item_id">ID</label>
 				</div>
 				<div class="col-md-9">
-					<input id="item_id" name="item_id" type="text" class="form-control" disabled="true" value="{{ data['item'].id }}">	
+				{% if form.id.data %}
+					{{ form.id(class_='form-control', disabled='true', value=form.id.data) }}
+				{% else %}
+					{{ form.id(class_='form-control', disabled='true') }}
+				{% endif %}
 				</div>
 			</div>
 			<div class="form-group">
@@ -19,21 +28,47 @@
 					<label class="control-label" for="name">Name</label>
 				</div>
 				<div class="col-md-9">
-					<input id="name" name="name" type="text" class="form-control" value="{{ data['item'].name }}">	
+				{% if form.name.data %}
+					{{ form.name(class_='form-control', value=form.name.data) }}
+				{% else %}
+					{{ form.name(class_='form-control') }}
+				{% endif %}
 				</div>
 			</div>
+    		{% for error in form.name.errors %}
+    		<div class="col-md-3"></div>
+    		<div class="col-md-9">
+				<div class="alert alert-danger text-center" role="alert">{{ error }}</div>
+			</div>
+    		{% endfor %}
 			<div class="form-group">
 				<div class="col-md-3">
 					<label class="control-label" for="price">Price</label>
 				</div>
 				<div class="col-md-9">
-					<input id="price" name="price" type="text" class="form-control" value="{{ data['item'].price }}">	
+					<div class="input-group">
+						<span class="input-group-addon">£</span>
+						{% if form.price.data %}
+							{{ form.price(class_='form-control', value=form.price.data) }}
+						{% else %}
+							{{ form.price(class_='form-control') }}
+						{% endif %}
+					</div>
 				</div>
 			</div>
+			{% if form.price.errors %}
+        		{% for error in form.price.errors %}
+        		<div class="col-md-3"></div>
+        		<div class="col-md-9">
+        			<div class="alert alert-danger text-center" role="alert">{{ error }}</div>
+        		</div>
+        		{% endfor %}
+    		{% endif %}
+
 
 			<div class="form-group">
 				<div class="col-xs-3">
-					<label class="checkbox control-label" for="active">Active</label>
+					<label class="checkbox control-label" for="active" style="color:red;">Active</label>
 				</div>
 				<div class="col-xs-9">
 					<input id="active" name="active" type="checkbox" class="checkbox form-control" value="">	 
