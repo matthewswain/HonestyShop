@@ -12,7 +12,7 @@
 			<p>Please enter your details below to register.</p>
 		</div>
 		<hr>
-		<form target="" method="POST" role="form" class="form-horizontal">
+		<form target="" method="POST" role="form" id="register_form" class="form-horizontal">
 			<div class="form-group">
 				<div class="col-md-3">
 					<label class="control-label" for="email">Email</label>
@@ -42,7 +42,7 @@
 			</div>
     		{% endfor %}
 			<div class="text-right">
-		    	<input value="Register" type="submit" class="btn btn-primary btn-lg">
+		    	<input value="Register" type="button" id="submit_button" class="btn btn-primary btn-lg" onClick="submitForm('register_form')">
 		    </div>
 		</form>
 		<hr>

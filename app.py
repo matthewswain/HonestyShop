@@ -71,7 +71,7 @@ def login():
              return redirect(url_for('home'))
         else:
             flash('Login failed, please retry.', 'alert alert-danger')
-            return redirect(url_for('login'), form=form)
+            return redirect(url_for('login'))
     else:
         return render_template('login.html', urls=get_urls(), form=form)
 
@@ -204,7 +204,7 @@ def items_edit(item_id):
     form = ItemForm(request.form)
 
     if request.method == 'POST' and form.validate():
-        if Item.query.filter(Item.name==form.name.data).first():
+        if Item.query.filter(Item.name==form.name.data, Item.id!=form.id.data).first():
             data = {}
             data['nav_urls'] = get_urls()
             data['active_url'] = url_for('items_new')
