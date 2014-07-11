@@ -179,10 +179,17 @@ def items():
 def items_new():
     form = ItemForm(request.form)
     if request.method == 'POST' and form.validate():
-        item = Item(form.name.data, form.price.data)
-        db.add(item)
-        db.commit()
-        return redirect(url_for('items'))
+        if Item.query.filter(Item.name==form.name.data).first():
+            data = {}
+            data['nav_urls'] = get_urls()
+            data['active_url'] = url_for('items_new')
+            duplicate=True
+            return render_template('items_edit.html', form=form, data=data, duplicate=duplicate)
+        else:
+            item = Item(form.name.data, form.price.data)
+            db.add(item)
+            db.commit()
+            return redirect(url_for('items'))
     else:
         data = {}
         data['nav_urls'] = get_urls()
@@ -197,12 +204,19 @@ def items_edit(item_id):
     form = ItemForm(request.form)
 
     if request.method == 'POST' and form.validate():
-        item = Item.query.filter(Item.id==item_id).first()
-        item.name = form.name.data
-        item.price = form.price.data
-        db.add(item)
-        db.commit()
-        return redirect(url_for('items'))
+        if Item.query.filter(Item.name==form.name.data).first():
+            data = {}
+            data['nav_urls'] = get_urls()
+            data['active_url'] = url_for('items_new')
+            duplicate=True
+            return render_template('items_edit.html', form=form, data=data, duplicate=duplicate)
+        else:
+            item = Item.query.filter(Item.id==item_id).first()
+            item.name = form.name.data
+            item.price = form.price.data
+            db.add(item)
+            db.commit()
+            return redirect(url_for('items'))
     else:
         data = {}
         data['nav_urls'] = get_urls()

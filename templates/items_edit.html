@@ -17,9 +17,11 @@
 				</div>
 				<div class="col-md-9">
 				{% if form.id.data %}
-					{{ form.id(class_='form-control', disabled='true', value=form.id.data) }}
+					{{ form.id(value=form.id.data) }}
+					<input type="text" class="form-control" disabled="true" value="{{ form.id.data }}">
 				{% else %}
-					{{ form.id(class_='form-control', disabled='true') }}
+					{{ form.id(class_='form-control') }}
+					<input type="text" class="form-control" disabled="true">
 				{% endif %}
 				</div>
 			</div>
@@ -41,6 +43,12 @@
 				<div class="alert alert-danger text-center" role="alert">{{ error }}</div>
 			</div>
     		{% endfor %}
+    		{% if duplicate %}
+    		<div class="col-md-3"></div>
+    		<div class="col-md-9">
+				<div class="alert alert-danger text-center" role="alert">An item with this name already exists.</div>
+			</div>
+    		{% endif %}
 			<div class="form-group">
 				<div class="col-md-3">
 					<label class="control-label" for="price">Price</label>
