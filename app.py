@@ -187,6 +187,7 @@ def items_new():
             return render_template('items_edit.html', form=form, data=data, duplicate=duplicate)
         else:
             item = Item(form.name.data, form.price.data)
+            item.active = form.active.data
             db.add(item)
             db.commit()
             return redirect(url_for('items'))
@@ -214,6 +215,7 @@ def items_edit(item_id):
             item = Item.query.filter(Item.id==item_id).first()
             item.name = form.name.data
             item.price = form.price.data
+            item.active = form.active.data
             db.add(item)
             db.commit()
             return redirect(url_for('items'))
@@ -225,6 +227,7 @@ def items_edit(item_id):
         form.id.data = item.id
         form.name.data = item.name
         form.price.data = item.price
+        form.active.data = item.active
         return render_template('items_edit.html', data=data, form=form)
 
 

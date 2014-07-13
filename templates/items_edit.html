@@ -76,15 +76,19 @@
 
 			<div class="form-group">
 				<div class="col-xs-3">
-					<label class="checkbox control-label" for="active" style="color:red;">Active</label>
+					<label class="checkbox control-label" for="active">Active</label>
 				</div>
 				<div class="col-xs-9">
-					<input id="active" name="active" type="checkbox" class="checkbox form-control" value="">	 
+					{% if form.active.data or not form.name.data %}
+						{{ form.active(class='checkbox form-control', checked='True') }}
+					{% else %}
+						{{ form.active(class='checkbox form-control') }}
+					{% endif %}
 				</div>
 			</div>
 
 			<div class="text-center">
-				<button type="button" id="submit_button" class="btn btn-success btn-lg" onClick="submitForm('item_form')">Save</button>
+				<button type="submit" id="submit_button" class="btn btn-success btn-lg" onClick="submitForm('item_form')">Save</button>
 			</div>
 		</form>
 		<hr>
