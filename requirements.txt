@@ -1,3 +1,5 @@
-ConfigObj
-Flask
-SqlAlchemy
+flask
+configobj
+sqlalchemy
+wtforms
+jinja2
