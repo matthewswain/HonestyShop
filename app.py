@@ -9,7 +9,7 @@ from configobj import ConfigObj
 
 config = ConfigObj('app.config')
 app = Flask(__name__)
-
+app.secret_key = 'Development secret key'
 
 def login_required(f):
     @wraps(f)
@@ -237,5 +237,5 @@ def shutdown_session(exception=None):
 
 
 if __name__ == '__main__':
-    app.secret_key = 'Development secret key'
-    app.run(debug=True, host='0.0.0.0')
+    #app.run(debug=True, host='0.0.0.0')
+    app.run()
