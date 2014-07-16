@@ -9,7 +9,7 @@ from configobj import ConfigObj
 
 config = ConfigObj('app.config')
 app = Flask(__name__)
-app.secret_key = 'Development secret key'
+app.secret_key = config['secret_key']
 
 def login_required(f):
     @wraps(f)
