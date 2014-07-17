@@ -9,7 +9,7 @@ from configobj import ConfigObj
 
 config = ConfigObj('app.config')
 app = Flask(__name__)
-app.secret_key = config['secret_key']
+app.secret_key = 'Development secret key.'
 
 def login_required(f):
     @wraps(f)
@@ -138,6 +138,7 @@ def buy():
         purchase = Purchase(user, item)
         db.add(purchase)
         db.commit()
+        flash('Purchase successful, return to buy.','alert alert-success')
         return redirect(url_for('history'))
     else:
         data = {}
