@@ -1,8 +1,8 @@
 from flask import Flask, render_template, url_for, request, redirect, session, make_response, flash, get_flashed_messages
 from functools import wraps
 from database import session as db
-from models import User, Item, Purchase, ActivationToken, PasswordToken
-from forms import ItemForm, LoginForm
+from models import User, Item, Purchase, ActivationToken, PasswordToken, Payment
+from forms import ItemForm, LoginForm, PaymentForm
 from security import Authentication, Email
 from configobj import ConfigObj
 
@@ -159,8 +159,9 @@ def history():
     data['active_url'] = url_for('history')
     user = User.get(session['email'])
     purchases = Purchase.query.filter(Purchase.user_id==user.id).order_by(Purchase.timestamp.desc())
+    payments = Payment.query.filter(Payment.user_id==user.id).order_by(Payment.timestamp.desc())
     data['purchases'] = purchases
-    return render_template('history.html', data=data)
+    return render_template('history.html', data=data, payments=payments)
 
 
 @app.route('/items/')
@@ -232,11 +233,33 @@ def items_edit(item_id):
         return render_template('items_edit.html', data=data, form=form)
 
 
+@app.route('/payment/', methods=['GET','POST'])
+@login_required
+@group_required(['admin'])
+def payment():
+    form = PaymentForm(request.form)
+    users = User.query.all()
+
+    if request.method == 'POST' and form.validate():
+        user = User.query.filter(User.id==request.form['user_id']).first()
+        payment = Payment(user, form.value.data)
+        db.add(payment)
+        db.commit()
+        flash('Payment added successfully.','alert alert-success')
+        return redirect(url_for('payment'))
+    else:
+        data = {}
+        data['nav_urls'] = get_urls()
+        data['active_url'] = url_for('payment')
+        return render_template('payment_add.html', data=data, form=form, users=users)
+
+
+
 @app.teardown_appcontext
 def shutdown_session(exception=None):
     db.remove()
 
 
 if __name__ == '__main__':
-    #app.run(debug=True, host='0.0.0.0')
-    app.run()
+    app.run(debug=True, host='0.0.0.0')
+    #app.run()

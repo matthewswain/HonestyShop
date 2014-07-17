@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+{% block body %}
+
+<div class="row">
+	<div class="col-sm-6 col-sm-offset-3">
+		<h1 class="text-center">Add Payment</h1>
+		<hr>
+		<form class="form-horizontal" target="" method="POST" id="payment_form" name="payment_form">	
+		{% for category, message in get_flashed_messages(with_categories=True) %}
+			<div class="{{ category }} text-center">{{ message }}</div>
+		{% endfor %}
+			<div class="form-group">
+				<div class="col-md-3">
+					<label class="control-label" for="user_id">User</label>
+				</div>
+				<div class="col-md-9">
+					<select name="user_id" id="user_id" class="form-control" placeholder="Select user">
+						{% for user in users %}
+							<option value="{{ user.id }}">{{ user.email }}</option>
+						{% endfor %}
+					</select>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<div class="col-md-3">
+					<label class="control-label" for="value">Value</label>
+				</div>
+				<div class="col-md-9">
+					<div class="input-group">
+						<span class="input-group-addon">£</span>
+						{% if form.value.data %}
+							{{ form.value(class_='form-control', value=form.value.data) }}
+						{% else %}
+							{{ form.value(class_='form-control') }}
+						{% endif %}
+					</div>
+				</div>
+			</div>
+			{% if form.value.errors %}
+        		{% for error in form.value.errors %}
+        		<div class="col-md-3"></div>
+        		<div class="col-md-9">
+        			<div class="alert alert-danger text-center" role="alert">{{ error }}</div>
+        		</div>
+        		{% endfor %}
+    		{% endif %}
+
+			<div class="text-center">
+				<button type="submit" id="submit_button" class="btn btn-success btn-lg" onClick="submitForm('payment_form')">Save</button>
+			</div>
+		</form>
+		<hr>
+	</div>
+</div>
+{% endblock body %}
