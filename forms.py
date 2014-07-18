@@ -13,4 +13,4 @@ class LoginForm(Form):
 
 
 class PaymentForm(Form):
-	value = DecimalField('Value', [validators.InputRequired(message='Value must be between 0.00 and 9999.99'), validators.NumberRange(min=0, max=9999, message='Value must be between 0.00 and 9999.99')], places=2, rounding=None)
+	value = DecimalField('Value', [validators.InputRequired(message='Value must be between -9999.00 and 9999.00'), validators.NumberRange(min=-9999, max=9999, message='Value must be between -9999.00 and 9999.00')], places=2, rounding=None)
