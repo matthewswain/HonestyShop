@@ -247,7 +247,7 @@ def items_edit(item_id):
 @group_required(['admin'])
 def payment():
     form = PaymentForm(request.form)
-    users = User.query.all()
+    users = User.query.filter(User.activated==True).order_by(User.email.asc())
 
     if request.method == 'POST' and form.validate():
         user = User.query.filter(User.id==request.form['user_id']).first()
