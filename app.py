@@ -160,8 +160,17 @@ def history():
     user = User.get(session['email'])
     purchases = Purchase.query.filter(Purchase.user_id==user.id).order_by(Purchase.timestamp.desc())
     payments = Payment.query.filter(Payment.user_id==user.id).order_by(Payment.timestamp.desc())
+
+    balance = 0
+
+    for purchase in purchases:
+        balance -= purchase.price
+
+    for payment in payments:
+        balance += payment.value
+
     data['purchases'] = purchases
-    return render_template('history.html', data=data, payments=payments)
+    return render_template('history.html', data=data, payments=payments, balance=balance)
 
 
 @app.route('/items/')
