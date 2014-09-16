@@ -263,6 +263,32 @@ def payment():
         return render_template('payment_add.html', data=data, form=form, users=users)
 
 
+@app.route('/admin/users/')
+@login_required
+@group_required(['admin'])
+def users():
+    users = User.query.all()
+    render_users = []
+
+    for user in users:
+        purchases = Purchase.query.filter(Purchase.user_id==user.id).order_by(Purchase.timestamp.desc())
+        payments = Payment.query.filter(Payment.user_id==user.id).order_by(Payment.timestamp.desc())
+
+        balance = 0
+
+        for purchase in purchases:
+            balance -= purchase.price
+
+        for payment in payments:
+            balance += payment.value
+
+        render_users.append((user.email, balance))
+
+    render_users.sort()
+    data = {}
+    data['nav_urls'] = get_urls()
+    data['active_url'] = url_for('users')
+    return render_template('users.html', data=data, users=render_users)
 
 @app.teardown_appcontext
 def shutdown_session(exception=None):
