@@ -10,37 +10,37 @@ Base.query = session.query_property()
 
 
 def init_db():
-    import models
+#    import models
     Base.metadata.create_all(engine)
 
-    admin_group = models.UserGroup('admin')
-    session.add(admin_group)
-    session.commit()
+#    admin_group = models.UserGroup('admin')
+#    session.add(admin_group)
+#    session.commit()
 
-    first_user = models.User('matthewswain@gmail.com', 'password')
-    first_user.activated = True
-    session.add(first_user)
-    session.commit()
+#    first_user = models.User('matthewswain@gmail.com', 'password')
+#    first_user.activated = True
+#    session.add(first_user)
+#    session.commit()
 
-    admin_membership = models.UserGroupMembership(first_user, admin_group)
-    session.add(admin_membership)
-    session.commit()
+#    admin_membership = models.UserGroupMembership(first_user, admin_group)
+#    session.add(admin_membership)
+#    session.commit()
 
-    second_user = models.User('matthew.swain@vista.co.nz', 'password')
-    second_user.activated = True
-    session.add(second_user)
-    session.commit()
+#    second_user = models.User('matthew.swain@vista.co.nz', 'password')
+#    second_user.activated = True
+#    session.add(second_user)
+#    session.commit()
 
-    coke = models.Item('Coke', 0.45)
-    session.add(coke)
-    session.commit()
+#    coke = models.Item('Coke', 0.45)
+#    session.add(coke)
+#    session.commit()
 
-    kitkat = models.Item('KitKat', 0.25)
-    session.add(kitkat)
-    session.commit()
+#    kitkat = models.Item('KitKat', 0.25)
+#    session.add(kitkat)
+#    session.commit()
 
-    twix = models.Item('Twix', 0.40)
-    session.add(twix)
+#    twix = models.Item('Twix', 0.40)
+#    session.add(twix)
     session.commit()
 
     session.close()
