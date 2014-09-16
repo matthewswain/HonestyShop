@@ -64,11 +64,13 @@ class PasswordToken(Base):
     id = Column(Integer, primary_key=True)
     url_part = Column(String, nullable=False, unique=True)
     user_id = Column(Integer, ForeignKey('users.id'), nullable=False)
+    hashed_password = Column(String, nullable=False)
     timestamp = Column(DateTime, nullable=False)
     
-    def __init__(self, user):
+    def __init__(self, user, password):
         self.url_part = Authentication.random_string(30)
         self.user_id = user.id
+        self.hashed_password = Authentication.salt_and_hash(password, user.salt)
         self.timestamp = datetime.now()
     
 

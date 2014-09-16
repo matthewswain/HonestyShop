@@ -112,6 +112,35 @@ def register():
         return render_template('register.html', urls=get_urls(), form=form)
 
 
+@app.route('/reset/', methods=['GET', 'POST'])
+@app.route('/reset/<url_part>', methods=['GET'])
+def reset(url_part=None):
+    form = LoginForm(request.form)
+    if request.method == 'POST':
+        user = User.query.filter(User.email == form.email.data).first()
+        token = PasswordToken(user, form.password.data)
+        db.add(token)
+        db.commit()
+
+        reset_url = url_for('reset', url_part=token.url_part)
+        reset_url = config['base_url'] + reset_url
+        email_body = render_template('email/reset_password.html', reset_url=reset_url)
+
+        Email.send(user.email, 'Honesty Bar - Reset Password', email_body)
+        flash('Confirmation email sent, please click link within before using your new password.', 'alert alert-warning')
+        return redirect(url_for('login'))
+    elif url_part is None:
+        return render_template('reset_password.html', form=form)
+    else:
+        token = PasswordToken.query.filter(PasswordToken.url_part==url_part).first()
+        user = token.user
+        user.password = token.hashed_password
+        db.add(user)
+        db.commit()
+        flash('New password confirmed, please login below', 'alert alert-success')
+        return redirect(url_for('login'))
+
+
 @app.route('/user/activate/<url_part>')
 def activate(url_part):
 
