@@ -1,6 +1,7 @@
 from flask import Flask, render_template, url_for, request, redirect, session, make_response, flash, get_flashed_messages
 from functools import wraps
-from database import session as db
+#from database import session as db
+from flask.ext.sqlalchemy import SQLAlchemy
 from models import User, Item, Purchase, ActivationToken, PasswordToken, Payment
 from forms import ItemForm, LoginForm, PaymentForm
 from security import Authentication, Email
@@ -10,6 +11,7 @@ from configobj import ConfigObj
 config = ConfigObj('app.config')
 app = Flask(__name__)
 app.secret_key = 'Development secret key.'
+db = SQLAlchemy(app)
 
 def login_required(f):
     @wraps(f)
@@ -319,9 +321,9 @@ def users():
     data['active_url'] = url_for('users')
     return render_template('users.html', data=data, users=render_users)
 
-@app.teardown_appcontext
-def shutdown_session(exception=None):
-    db.remove()
+#@app.teardown_appcontext
+#def shutdown_session(exception=None):
+#    db.remove()
 
 
 if __name__ == '__main__':
