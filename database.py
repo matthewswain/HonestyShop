@@ -10,7 +10,7 @@ Base.query = session.query_property()
 
 
 def init_db():
-#    import models
+    import models
     Base.metadata.create_all(engine)
 
 #    admin_group = models.UserGroup('admin')
