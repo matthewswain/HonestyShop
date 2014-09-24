@@ -127,7 +127,7 @@ def reset(url_part=None):
         dbs.add(token)
         dbs.commit()
 
-        reset_url = url_for('reset', url_part=token.url_part)
+        reset_url = url_for('reset') + token.url_part
         reset_url = app.config['BASE_URL'] + reset_url
         email_body = render_template('email/reset_password.html', reset_url=reset_url)
 

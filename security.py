@@ -49,4 +49,3 @@ class Email(object):
         smtp.login(BaseConfig.SMTP_USERNAME, BaseConfig.SMTP_PASSWORD)
         smtp.sendmail(BaseConfig.SMTP_SENDER, to_email, message.as_string())
         smtp.quit()
-        smtp.quit()
