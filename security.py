@@ -3,8 +3,6 @@ from hashlib import sha512
 from string import ascii_uppercase, ascii_lowercase, digits
 import smtplib
 from email.mime.text import MIMEText
-from models import User
-from app import app
 
 
 class Authentication(object):

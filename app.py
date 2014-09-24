@@ -1,6 +1,5 @@
 from flask import Flask, render_template, url_for, request, redirect, session, make_response, flash, get_flashed_messages
 from functools import wraps
-#from flask.ext.sqlalchemy import SQLAlchemy
 from models import User, Item, Purchase, ActivationToken, PasswordToken, Payment, db
 from forms import ItemForm, LoginForm, PaymentForm
 from security import Authentication, Email
@@ -10,7 +9,7 @@ from configobj import ConfigObj
 config = ConfigObj('app.config')
 app = Flask(__name__)
 app.config.from_object('config.BaseConfig')
-#db = SQLAlchemy(app)
+
 db.app = app
 db.init_app(app)
 dbs = db.session

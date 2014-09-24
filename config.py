@@ -1,7 +1,7 @@
 class BaseConfig(object):
 
     SQLALCHEMY_DATABASE_URI = 'sqlite:///honesty.db'
-    SECRET_KEY = ''
+    SECRET_KEY = 'a'
     BASE_URL = ''
 
     SMTP_PORT = 25
