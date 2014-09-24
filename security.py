@@ -3,6 +3,7 @@ from hashlib import sha512
 from string import ascii_uppercase, ascii_lowercase, digits
 import smtplib
 from email.mime.text import MIMEText
+from config import BaseConfig
 
 
 class Authentication(object):
@@ -40,11 +41,12 @@ class Email(object):
 
         message = MIMEText(body, 'html')
         message['To'] = to_email
-        message['From'] = app.config['SMTP_SENDER']
+        message['From'] = BaseConfig.SMTP_SENDER
         message['Subject'] = subject
 
-        smtp = smtplib.SMTP(app.config['SMTP_SERVER'], app.config['SMTP_PORT'])
+        smtp = smtplib.SMTP(BaseConfig.SMTP_SERVER, BaseConfig.SMTP_PORT)
         smtp.starttls()
-        smtp.login(app.config['SMTP_USERNAME'], app.config['SMTP_PASSWORD'])
-        smtp.sendmail(app.config['SMTP_SENDER'], to_email, message.as_string())
+        smtp.login(BaseConfig.SMTP_USERNAME, BaseConfig.SMTP_PASSWORD)
+        smtp.sendmail(BaseConfig.SMTP_SENDER, to_email, message.as_string())
+        smtp.quit()
         smtp.quit()
