@@ -61,7 +61,7 @@ class PasswordToken(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     url_part = db.Column(db.String, nullable=False, unique=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
-    hashed_password = db.Column(db.String, nullable=False)
+    hashed_password = db.Column(db.String)
     timestamp = db.Column(db.DateTime, nullable=False)
     
     def __init__(self, user, password):
