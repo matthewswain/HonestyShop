@@ -103,7 +103,7 @@ def register():
             dbs.commit()
 
             activation_url = url_for('activate', url_part=token.url_part)
-            activation_url = config['base_url'] + activation_url
+            activation_url = app.config['BASE_URL'] + activation_url
             email_body = render_template('email/register.html', activation_url=activation_url)
             
             Email.send(user.email, 'Honesty Bar - Activate Account', email_body)
@@ -129,7 +129,7 @@ def reset(url_part=None):
         dbs.commit()
 
         reset_url = url_for('reset', url_part=token.url_part)
-        reset_url = config['base_url'] + reset_url
+        reset_url = app.config['BASE_URL'] + reset_url
         email_body = render_template('email/reset_password.html', reset_url=reset_url)
 
         Email.send(user.email, 'Honesty Bar - Reset Password', email_body)

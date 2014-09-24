@@ -3,17 +3,16 @@ from hashlib import sha512
 from string import ascii_uppercase, ascii_lowercase, digits
 import smtplib
 from email.mime.text import MIMEText
-from configobj import ConfigObj
+from models import User
+from app import app
 
-config = ConfigObj('app.config')
 
-class Authentication:
+class Authentication(object):
 
     @staticmethod
     def user_exists(email):
-        user = User.query.filter(User.email==email.lower()).first()
-        return user != None
-
+        user = User.query.filter(User.email == email.lower()).first()
+        return user is not None
 
     @staticmethod
     def random_string(length):
@@ -23,34 +22,31 @@ class Authentication:
 
         return string
 
-
     @staticmethod
     def salt_and_hash(password, salt):
         return sha512(password + salt).hexdigest()
 
-
     @staticmethod
     def authenticate(user, password):
 
-        if user.password == Authentication.salt_and_hash(password, user.salt) and user.activated == True:
+        if user.password == Authentication.salt_and_hash(password, user.salt) and user.activated:
             return True
         else:
             return False
 
 
-class Email:
+class Email(object):
 
     @staticmethod
     def send(to_email, subject, body):
 
         message = MIMEText(body, 'html')
         message['To'] = to_email
-        message['From'] = config['smtp_sender']
+        message['From'] = app.config['SMTP_SENDER']
         message['Subject'] = subject
 
-        smtp = smtplib.SMTP(config['smtp_server'], config['smtp_port'])
+        smtp = smtplib.SMTP(app.config['SMTP_SERVER'], app.config['SMTP_PORT'])
         smtp.starttls()
-        smtp.login(config['smtp_username'], config['smtp_password'])
-        smtp.sendmail(config['smtp_sender'], to_email, message.as_string())
+        smtp.login(app.config['SMTP_USERNAME'], app.config['SMTP_PASSWORD'])
+        smtp.sendmail(app.config['SMTP_SENDER'], to_email, message.as_string())
         smtp.quit()
-
