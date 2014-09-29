@@ -122,16 +122,18 @@ def register():
 def reset(url_part=None):
     form = LoginForm(request.form)
     if request.method == 'POST':
-        user = User.query.filter(User.email == form.email.data).first()
-        token = PasswordToken(user, form.password.data)
-        dbs.add(token)
-        dbs.commit()
+        user = User.get(form.email.data)
 
-        reset_url = url_for('reset') + token.url_part
-        reset_url = app.config['BASE_URL'] + reset_url
-        email_body = render_template('email/reset_password.html', reset_url=reset_url)
+        if user is not None:
+            token = PasswordToken(user, form.password.data)
+            dbs.add(token)
+            dbs.commit()
 
-        Email.send(user.email, 'Honesty Bar - Reset Password', email_body)
+            reset_url = url_for('reset') + token.url_part
+            reset_url = app.config['BASE_URL'] + reset_url
+            email_body = render_template('email/reset_password.html', reset_url=reset_url)
+            Email.send(user.email, 'Honesty Bar - Reset Password', email_body)
+
         flash('Confirmation email sent, please click link within before using your new password.', 'alert alert-warning')
         return redirect(url_for('login'))
     elif url_part is None:
