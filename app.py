@@ -5,6 +5,7 @@ from forms import ItemForm, LoginForm, PaymentForm
 from security import Authentication, Email
 from configobj import ConfigObj
 
+import traceback
 
 config = ConfigObj('app.config')
 app = Flask(__name__)
@@ -104,15 +105,25 @@ def register():
             activation_url = url_for('activate', url_part=token.url_part)
             activation_url = app.config['BASE_URL'] + activation_url
             email_body = render_template('email/register.html', activation_url=activation_url)
-            
-            Email.send(user.email, 'Honesty Bar - Activate Account', email_body)
 
-            flash('Account created, please activate your account using the link in your welcome email.', 'alert alert-success')        
+            try:
+                Email.send(user.email, 'Honesty Bar - Activate Account', email_body)
+                flash('Account created, please activate your account using the link in your welcome email.', 'alert alert-success')
+            except:
+                flash('There was a problem sending your activation email, please try again later.', 'alert alert-danger')
+
+                dbs.delete(token)
+                dbs.commit()
+
+                dbs.delete(user)
+                dbs.commit()
+
+
         else:
             flash('An account with that email address already exists, please login.', 'alert alert-warning')    
 
         return redirect(url_for('login'))
-        
+
     else:
         return render_template('register.html', urls=get_urls(), form=form)
 
@@ -133,11 +144,12 @@ def reset(url_part=None):
             reset_url = app.config['BASE_URL'] + reset_url
             email_body = render_template('email/reset_password.html', reset_url=reset_url)
 
-            try:
-                Email.send(user.email, 'Honesty Bar - Reset Password', email_body)
-                flash('Confirmation email sent, please click link within before using your new password.', 'alert alert-warning')
-            except:
-                flash('There was a problem sending your confirmation email, please try again later.', 'alert alert-danger')
+#            try:
+            Email.send(user.email, 'Honesty Bar - Reset Password', email_body)
+            flash('Confirmation email sent, please click link within before using your new password.', 'alert alert-warning')
+#            except Exception as e:
+            flash('There was a problem sending your confirmation email, please try again later.', 'alert alert-danger')
+
 
         return redirect(url_for('login'))
     elif url_part is None:
@@ -361,10 +373,6 @@ def quick_buy():
     return render_template('quick_buy.html', users=users, items=items)
 
 
-#@app.teardown_appcontext
-#def shutdown_session(exception=None):
-#    db.remove()
-
 if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0')
-    #app.run()
+#    app.run(debug=True, host='0.0.0.0')
+    app.run()
