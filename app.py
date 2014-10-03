@@ -132,9 +132,13 @@ def reset(url_part=None):
             reset_url = url_for('reset') + token.url_part
             reset_url = app.config['BASE_URL'] + reset_url
             email_body = render_template('email/reset_password.html', reset_url=reset_url)
-            Email.send(user.email, 'Honesty Bar - Reset Password', email_body)
 
-        flash('Confirmation email sent, please click link within before using your new password.', 'alert alert-warning')
+            try:
+                Email.send(user.email, 'Honesty Bar - Reset Password', email_body)
+                flash('Confirmation email sent, please click link within before using your new password.', 'alert alert-warning')
+            except:
+                flash('There was a problem sending your confirmation email, please try again later.', 'alert alert-danger')
+
         return redirect(url_for('login'))
     elif url_part is None:
         return render_template('reset_password.html', form=form)
