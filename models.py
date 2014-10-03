@@ -20,10 +20,14 @@ class User(db.Model):
     password_tokens = db.relationship('PasswordToken', backref='user')
     activation_tokens = db.relationship('ActivationToken', backref='user')
     memberships = db.relationship('UserGroupMembership', backref='user')
+    pin = db.Column(db.String)
 
     def set_password(self, password):
         self.salt = Authentication.random_string(10)
         self.password = Authentication.salt_and_hash(password, self.salt)
+
+    def set_pin(self, pin):
+        self.pin = Authentication.salt_and_hash(pin, self.salt)
 
     def get_group_names(self):
         group_names = []
