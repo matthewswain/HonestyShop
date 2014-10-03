@@ -335,10 +335,31 @@ def users():
     }
     return render_template('users.html', data=data, users=render_users)
 
+
+@app.route('/buy/quick/', methods = ['GET', 'POST'])
+def quick_buy():
+
+    users = User.query.filter(User.activated).order_by(User.email.asc())
+    items = Item.query.filter(Item.active)
+
+    if request.method == 'POST':
+        user = User.query.filter(User.id == request.form['user_id']).first()
+
+        if user is not None and Authentication.authenticate(user, request.form['password']):
+            item = Item.query.filter(Item.id == request.form['item_id']).first()
+            purchase = Purchase(user, item)
+            dbs.add(purchase)
+            dbs.commit()
+            flash('Quick-buy successful!', 'alert alert-success')
+        else:
+            flash('Quick-buy failed, please try again with the right password.', 'alert alert-danger')
+
+    return render_template('quick_buy.html', users=users, items=items)
+
+
 #@app.teardown_appcontext
 #def shutdown_session(exception=None):
 #    db.remove()
-
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0')
