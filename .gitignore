@@ -2,3 +2,4 @@
 *.db
 Honesty Bar.mm
 app.config
+.idea/*
