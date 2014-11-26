@@ -140,6 +140,7 @@ def reset(url_part=None):
         token = PasswordToken.query.filter(PasswordToken.url_part == url_part).first()
         user = token.user
         user.password = token.hashed_password
+        user.activated = True
         dbs.add(user)
         dbs.commit()
         flash('New password confirmed, please login below', 'alert alert-success')
