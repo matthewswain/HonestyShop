@@ -5,9 +5,9 @@ class BaseConfig(object):
     BASE_URL = 'http://localhost'
 
     SMTP_PORT = 25
-    SMTP_USERNAME = '2c8c775d-b3d7-4df0-9fd9-d285d5dba925'
-    SMTP_PASSWORD = '2c8c775d-b3d7-4df0-9fd9-d285d5dba925'
+    SMTP_USERNAME = '90e9fb2a-c63a-4f5c-961a-695ea4c81f36'
+    SMTP_PASSWORD = '90e9fb2a-c63a-4f5c-961a-695ea4c81f36'
     SMTP_SENDER = 'admin@honestybar.uk'
     SMTP_SERVER = 'smtp.postmarkapp.com'
 
-    DEBUG = True
+    DEBUG = False

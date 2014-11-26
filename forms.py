@@ -9,7 +9,7 @@ class ItemForm(Form):
 
 class LoginForm(Form):
 	email=StringField('Email', [validators.Email(message='Please enter a valid email address.')])
-	password=PasswordField('Password', [validators.InputRequired(message='Password must be eight characters or more.'), validators.Length(min=8, message='Password must be eight characters or more.')])
+	password=PasswordField('Password', [validators.InputRequired(message='Password must be four characters or more.'), validators.Length(min=4, message='Password must be four characters or more.')])
 
 
 class PaymentForm(Form):
