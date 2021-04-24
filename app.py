@@ -107,7 +107,7 @@ def register():
             email_body = render_template('email/register.html', activation_url=activation_url)
 
             try:
-                Email.send(user.email, 'Honesty Bar - Activate Account', email_body)
+                Email.send(user.email, 'Honesty Shop - Activate Account', email_body)
                 flash('Account created, please activate your account using the link in your welcome email.', 'alert alert-success')
             except:
                 flash('There was a problem sending your activation email, please try again later.', 'alert alert-danger')
@@ -145,7 +145,7 @@ def reset(url_part=None):
             email_body = render_template('email/reset_password.html', reset_url=reset_url)
 
             try:
-                Email.send(user.email, 'Honesty Bar - Reset Password', email_body)
+                Email.send(user.email, 'Honesty Shop - Reset Password', email_body)
                 flash('Confirmation email sent, please click link within before using your new password.', 'alert alert-warning')
             except:
                 flash('There was a problem sending your confirmation email, please try again later.', 'alert alert-danger')
