@@ -1,4 +1,4 @@
-from flask.ext.sqlalchemy import SQLAlchemy
+from flask_sqlalchemy import SQLAlchemy
 from security import Authentication
 from datetime import datetime
 
@@ -24,10 +24,10 @@ class User(db.Model):
 
     def set_password(self, password):
         self.salt = Authentication.random_string(10)
-        self.password = Authentication.salt_and_hash(password, self.salt)
+        self.password = Authentication.salt_and_hash(password.encode('utf-8'), self.salt.encode('utf-8'))
 
     def set_pin(self, pin):
-        self.pin = Authentication.salt_and_hash(pin, self.salt)
+        self.pin = Authentication.salt_and_hash(pin.encode('utf-8'), self.salt.encode('utf-8'))
 
     def get_group_names(self):
         group_names = []
@@ -71,7 +71,7 @@ class PasswordToken(db.Model):
     def __init__(self, user, password):
         self.url_part = Authentication.random_string(30)
         self.user_id = user.id
-        self.hashed_password = Authentication.salt_and_hash(password, user.salt)
+        self.hashed_password = Authentication.salt_and_hash(password.encode('utf-8'), user.salt.encode('utf-8'))
         self.timestamp = datetime.now()
     
 

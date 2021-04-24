@@ -28,7 +28,7 @@ class Authentication(object):
     @staticmethod
     def authenticate(user, password):
 
-        if user.password == Authentication.salt_and_hash(password, user.salt) and user.activated:
+        if user.password == Authentication.salt_and_hash(password.encode('utf-8'), user.salt.encode('utf-8')) and user.activated:
             return True
         else:
             return False

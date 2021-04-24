@@ -11,7 +11,7 @@ def init_db():
     db.session.add(admin_group)
     db.session.commit()
 
-    first_user = models.User('matthewswain@gmail.com', 'password')
+    first_user = models.User('matthew@example.com', 'password')
     first_user.activated = True
     db.session.add(first_user)
     db.session.commit()
@@ -20,7 +20,7 @@ def init_db():
     db.session.add(admin_membership)
     db.session.commit()
 
-    second_user = models.User('matthew.swain@vista.co', 'password')
+    second_user = models.User('anna@example.com', 'password')
     second_user.activated = True
     db.session.add(second_user)
     db.session.commit()
