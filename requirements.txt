@@ -2,7 +2,7 @@ click==7.1.2
 configobj==5.0.6
 dnspython==2.1.0
 email-validator==1.1.2
-Flask==1.1.2
+Flask==2.3.2
 Flask-SQLAlchemy==2.5.1
 greenlet==1.0.0
 idna==3.1
